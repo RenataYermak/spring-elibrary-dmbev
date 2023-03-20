@@ -1,0 +1,67 @@
+package org.example.service.dao;
+
+import org.example.service.integration.IntegrationTestBase;
+import org.example.service.util.EntityTestUtil;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.service.util.ConstantUtil.ALL_AUTHORS;
+import static org.example.service.util.ConstantUtil.AUTHOR_ID_ONE;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class AuthorRepositoryIT extends IntegrationTestBase {
+
+    private final AuthorRepository authorRepository = context.getBean(AuthorRepository.class);
+
+    @Test
+    void findById() {
+        var actualAuthor = authorRepository.findById(AUTHOR_ID_ONE);
+        session.clear();
+
+        assertThat(actualAuthor).isPresent();
+        assertThat(actualAuthor.get().getName()).isEqualTo("Stephan King");
+    }
+
+    @Test
+    void findAll() {
+        var authors = authorRepository.findAll();
+        session.clear();
+
+        assertNotNull(authors);
+        assertThat(authors).hasSize(ALL_AUTHORS);
+    }
+
+    @Test
+    void save() {
+        var author = EntityTestUtil.getAuthor();
+
+        var actualAuthor = authorRepository.save(author);
+
+        assertThat(actualAuthor.getId()).isNotNull();
+    }
+
+    @Test
+    void delete() {
+        var author = EntityTestUtil.getAuthor();
+        authorRepository.save(author);
+        authorRepository.delete(author);
+        session.clear();
+
+        var deletedAuthor = authorRepository.findById(author.getId());
+
+        assertThat(deletedAuthor).isEmpty();
+    }
+
+    @Test
+    void update() {
+        var expectedAuthor = authorRepository.findById(AUTHOR_ID_ONE).get();
+        expectedAuthor.setName("Ernest Hemingway");
+        authorRepository.update(expectedAuthor);
+        session.clear();
+
+        var actualAuthor = authorRepository.findById(AUTHOR_ID_ONE);
+
+        assertThat(actualAuthor).isPresent();
+        assertThat(actualAuthor.get().getName()).isEqualTo("Ernest Hemingway");
+    }
+}

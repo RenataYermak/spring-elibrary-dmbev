@@ -1,0 +1,7 @@
+# Project exclude paths
+/common/target/
+/service/target/
+
+# idea files
+.idea/
+/.idea/
