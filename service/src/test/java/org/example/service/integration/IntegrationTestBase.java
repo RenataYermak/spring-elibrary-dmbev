@@ -1,42 +1,27 @@
 package org.example.service.integration;
 
-import org.example.service.config.LibraryConfiguration;
-import org.example.service.util.TestDataImporter;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+import org.example.service.anotation.IT;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-import javax.persistence.EntityManager;
-
+@IT
+@Sql({
+        "classpath:sql/data.sql"
+})
 public abstract class IntegrationTestBase {
 
-    protected static AnnotationConfigApplicationContext context;
-    protected static Session session;
+    private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:15");
 
     @BeforeAll
     static void init() {
-        context = new AnnotationConfigApplicationContext(LibraryConfiguration.class);
-        SessionFactory sessionFactory = context.getBean(SessionFactory.class);
-        session = (Session) context.getBean(EntityManager.class);
-        TestDataImporter.importData(sessionFactory);
+        container.start();
     }
 
-    @BeforeEach
-    void getSession() {
-        session.beginTransaction();
-    }
-
-    @AfterEach
-    void closeSession() {
-        session.getTransaction().rollback();
-    }
-
-    @AfterAll
-    static void close() {
-        context.close();
+    @DynamicPropertySource
+    static void postgresProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", container::getJdbcUrl);
     }
 }

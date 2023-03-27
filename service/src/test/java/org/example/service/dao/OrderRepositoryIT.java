@@ -1,5 +1,6 @@
 package org.example.service.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.OrderStatus;
 import org.example.service.database.entity.OrderType;
 import org.example.service.dto.OrderFilter;
@@ -7,6 +8,7 @@ import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,14 +16,16 @@ import static org.example.service.util.ConstantUtil.ALL_ORDERS;
 import static org.example.service.util.ConstantUtil.ORDER_ID_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@RequiredArgsConstructor
 public class OrderRepositoryIT extends IntegrationTestBase {
 
-    private final OrderRepository orderRepository = context.getBean(OrderRepository.class);
+    private final OrderRepository orderRepository;
+    private final EntityManager entityManager;
 
     @Test
     void findById() {
         var actualOrder = orderRepository.findById(ORDER_ID_ONE);
-        session.clear();
+        entityManager.clear();
 
         assertThat(actualOrder).isPresent();
         assertThat(actualOrder.get().getType()).isEqualTo(OrderType.SEASON_TICKET);
@@ -30,7 +34,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
     @Test
     void findAll() {
         var orders = orderRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertNotNull(orders);
         assertThat(orders).hasSize(ALL_ORDERS);
@@ -44,10 +48,10 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var user = EntityTestUtil.getUser();
         var order = EntityTestUtil.getOrder(book, user);
 
-        session.save(category);
-        session.save(author);
-        session.save(book);
-        session.save(user);
+        entityManager.persist(category);
+        entityManager.persist(author);
+        entityManager.persist(book);
+        entityManager.persist(user);
 
         var actualOrder = orderRepository.save(order);
 
@@ -62,14 +66,14 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var user = EntityTestUtil.getUser();
         var order = EntityTestUtil.getOrder(book, user);
 
-        session.save(category);
-        session.save(author);
-        session.save(book);
-        session.save(user);
+        entityManager.persist(category);
+        entityManager.persist(author);
+        entityManager.persist(book);
+        entityManager.persist(user);
 
         orderRepository.save(order);
         orderRepository.delete(order);
-        session.clear();
+        entityManager.clear();
 
         var deletedOrder = orderRepository.findById(order.getId());
 
@@ -81,7 +85,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var expectedOrder = orderRepository.findById(ORDER_ID_ONE).get();
         expectedOrder.setType(OrderType.READING_ROOM);
         orderRepository.update(expectedOrder);
-        session.clear();
+        entityManager.clear();
 
         var actualOrder = orderRepository.findById(ORDER_ID_ONE);
 

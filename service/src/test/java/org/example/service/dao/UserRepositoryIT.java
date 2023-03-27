@@ -1,24 +1,29 @@
 package org.example.service.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.Role;
 import org.example.service.dto.UserFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.util.ConstantUtil.ALL_USERS;
 import static org.example.service.util.ConstantUtil.USER_ID_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@RequiredArgsConstructor
 public class UserRepositoryIT extends IntegrationTestBase {
 
-    private final UserRepository userRepository = context.getBean(UserRepository.class);
+    private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
     @Test
     void findById() {
         var actualUser = userRepository.findById(USER_ID_ONE);
-        session.clear();
+        entityManager.clear();
 
         assertThat(actualUser).isPresent();
         assertThat(actualUser.get().getEmail()).isEqualTo("renatayermak@gmail.com");
@@ -27,7 +32,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
     @Test
     void findAll() {
         var users = userRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertNotNull(users);
         assertThat(users).hasSize(ALL_USERS);
@@ -48,7 +53,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         userRepository.save(user);
 
         userRepository.delete(user);
-        session.clear();
+        entityManager.clear();
 
         var deletedUser = userRepository.findById(user.getId());
 
@@ -61,7 +66,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var expectedUser = userRepository.findById(USER_ID_ONE).get();
         expectedUser.setEmail("newemail@gmail.com");
         userRepository.update(expectedUser);
-        session.clear();
+        entityManager.clear();
 
         var actualUser = userRepository.findById(USER_ID_ONE);
 
@@ -75,7 +80,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var password = "1212";
 
         var users = userRepository.findAllByEmailAndPassword(email, password);
-        session.clear();
+        entityManager.clear();
 
         assertNotNull(users);
         assertThat(users).hasSize(1);
@@ -87,7 +92,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var email = "yermakrenata@gmail.com";
         var password = "1313";
         var users = userRepository.findAllByEmailAndPassword(email, password);
-        session.clear();
+        entityManager.clear();
 
         assertThat(users).hasSize(0);
     }

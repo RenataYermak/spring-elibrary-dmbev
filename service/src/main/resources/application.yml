@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: postgres
+    password: 1212
+    driver-class-name: org.postgresql.Driver
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      current_session_context_class: thread
+
+logging:
+  level:
+    root: INFO

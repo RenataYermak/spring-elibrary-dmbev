@@ -1,23 +1,28 @@
 package org.example.service.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.example.service.dto.BookFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
+
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.util.ConstantUtil.ALL_BOOKS;
 import static org.example.service.util.ConstantUtil.BOOK_ID_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@RequiredArgsConstructor
 class BookRepositoryIT extends IntegrationTestBase {
 
-    private final BookRepository bookRepository = context.getBean(BookRepository.class);
+    private final BookRepository bookRepository;
+    private final EntityManager entityManager;
 
     @Test
     void findById() {
         var actualBook = bookRepository.findById(BOOK_ID_ONE);
-        session.clear();
+        entityManager.clear();
 
         assertThat(actualBook).isPresent();
         assertThat(actualBook.get().getTitle()).isEqualTo("Death on the Nile");
@@ -26,7 +31,7 @@ class BookRepositoryIT extends IntegrationTestBase {
     @Test
     void findAll() {
         var books = bookRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertNotNull(books);
         assertThat(books).hasSize(ALL_BOOKS);
@@ -38,8 +43,8 @@ class BookRepositoryIT extends IntegrationTestBase {
         var author = EntityTestUtil.getAuthor();
         var book = EntityTestUtil.getBook(category, author);
 
-        session.save(category);
-        session.save(author);
+        entityManager.persist(category);
+        entityManager.persist(author);
 
         var actualBook = bookRepository.save(book);
 
@@ -52,12 +57,12 @@ class BookRepositoryIT extends IntegrationTestBase {
         var author = EntityTestUtil.getAuthor();
         var book = EntityTestUtil.getBook(category, author);
 
-        session.save(category);
-        session.save(author);
-        session.save(book);
+        entityManager.persist(category);
+        entityManager.persist(author);
+        entityManager.persist(book);
 
         bookRepository.delete(book);
-        session.clear();
+        entityManager.clear();
 
         var deletedBook = bookRepository.findById(book.getId());
 
@@ -69,7 +74,7 @@ class BookRepositoryIT extends IntegrationTestBase {
         var expectedBook = bookRepository.findById(BOOK_ID_ONE).get();
         expectedBook.setTitle("New Title");
         bookRepository.update(expectedBook);
-        session.clear();
+        entityManager.clear();
 
         var actualBook = bookRepository.findById(BOOK_ID_ONE);
 

@@ -1,22 +1,27 @@
 package org.example.service.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
+
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.util.ConstantUtil.ALL_CATEGORIES;
 import static org.example.service.util.ConstantUtil.CATEGORY_ID_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@RequiredArgsConstructor
 public class CategoryRepositoryIT extends IntegrationTestBase {
 
-    private final CategoryRepository categoryRepository = context.getBean(CategoryRepository.class);
+    private final CategoryRepository categoryRepository;
+    private final EntityManager entityManager;
 
     @Test
     void findById() {
         var actualCategory = categoryRepository.findById(CATEGORY_ID_ONE);
-        session.clear();
+        entityManager.clear();
 
         assertThat(actualCategory).isPresent();
         assertThat(actualCategory.get().getName()).isEqualTo("Drama");
@@ -25,7 +30,7 @@ public class CategoryRepositoryIT extends IntegrationTestBase {
     @Test
     void findAll() {
         var categories = categoryRepository.findAll();
-        session.clear();
+        entityManager.clear();
 
         assertNotNull(categories);
         assertThat(categories).hasSize(ALL_CATEGORIES);
@@ -46,7 +51,7 @@ public class CategoryRepositoryIT extends IntegrationTestBase {
         categoryRepository.save(category);
 
         categoryRepository.delete(category);
-        session.clear();
+        entityManager.clear();
 
         var deletedCategory = categoryRepository.findById(category.getId());
 
@@ -58,7 +63,7 @@ public class CategoryRepositoryIT extends IntegrationTestBase {
         var expectedCategory = categoryRepository.findById(CATEGORY_ID_ONE).get();
         expectedCategory.setName("Science");
         categoryRepository.update(expectedCategory);
-        session.clear();
+        entityManager.clear();
 
         var actualCategory = categoryRepository.findById(CATEGORY_ID_ONE);
 
