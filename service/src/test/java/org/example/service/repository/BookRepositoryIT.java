@@ -1,6 +1,7 @@
-package org.example.service.dao;
+package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.database.repository.BookRepository;
 import org.example.service.dto.BookFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
@@ -62,6 +63,7 @@ class BookRepositoryIT extends IntegrationTestBase {
         entityManager.persist(book);
 
         bookRepository.delete(book);
+        entityManager.flush();
         entityManager.clear();
 
         var deletedBook = bookRepository.findById(book.getId());
@@ -73,7 +75,7 @@ class BookRepositoryIT extends IntegrationTestBase {
     void update() {
         var expectedBook = bookRepository.findById(BOOK_ID_ONE).get();
         expectedBook.setTitle("New Title");
-        bookRepository.update(expectedBook);
+        bookRepository.saveAndFlush(expectedBook);
         entityManager.clear();
 
         var actualBook = bookRepository.findById(BOOK_ID_ONE);
@@ -90,7 +92,7 @@ class BookRepositoryIT extends IntegrationTestBase {
                 .author("Agatha Christie")
                 .build();
 
-        var books = bookRepository.findByFilterQueryDsl(filter);
+        var books = bookRepository.findByFilter(filter);
 
         assertNotNull(books);
         assertThat(books).hasSize(1);
@@ -106,7 +108,7 @@ class BookRepositoryIT extends IntegrationTestBase {
                 .category("Detective")
                 .build();
 
-        var books = bookRepository.findByFilterQueryDsl(filter);
+        var books = bookRepository.findByFilter(filter);
 
         assertNotNull(books);
         assertThat(books).hasSize(2);
@@ -121,7 +123,7 @@ class BookRepositoryIT extends IntegrationTestBase {
         var filter = BookFilter.builder()
                 .build();
 
-        var books = bookRepository.findByFilterQueryDsl(filter);
+        var books = bookRepository.findByFilter(filter);
 
         assertThat(books).hasSize(bookRepository.findAll().size());
     }

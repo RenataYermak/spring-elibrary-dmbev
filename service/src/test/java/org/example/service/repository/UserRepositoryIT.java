@@ -1,7 +1,8 @@
-package org.example.service.dao;
+package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.Role;
+import org.example.service.database.repository.UserRepository;
 import org.example.service.dto.UserFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
@@ -52,7 +53,8 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var user = EntityTestUtil.getUser();
         userRepository.save(user);
 
-        userRepository.delete(user);
+        userRepository.deleteById(user.getId());
+        entityManager.flush();
         entityManager.clear();
 
         var deletedUser = userRepository.findById(user.getId());
@@ -65,7 +67,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
     void update() {
         var expectedUser = userRepository.findById(USER_ID_ONE).get();
         expectedUser.setEmail("newemail@gmail.com");
-        userRepository.update(expectedUser);
+        userRepository.saveAndFlush(expectedUser);
         entityManager.clear();
 
         var actualUser = userRepository.findById(USER_ID_ONE);
@@ -106,7 +108,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
                 .role(Role.USER)
                 .build();
 
-        var users = userRepository.findUsersByQuery(filter);
+        var users = userRepository.findByFilter(filter);
 
         assertNotNull(users);
         assertThat(users).hasSize(1);
@@ -122,7 +124,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
                 .role(Role.USER)
                 .build();
 
-        var users = userRepository.findUsersByQuery(filter);
+        var users = userRepository.findByFilter(filter);
 
         assertNotNull(users);
         assertThat(users).hasSize(3);
@@ -136,7 +138,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var filter = UserFilter.builder()
                 .build();
 
-        var users = userRepository.findUsersByQuery(filter);
+        var users = userRepository.findByFilter(filter);
 
         assertNotNull(users);
         assertThat(users).hasSize(userRepository.findAll().size());

@@ -1,8 +1,9 @@
-package org.example.service.dao;
+package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.OrderStatus;
 import org.example.service.database.entity.OrderType;
+import org.example.service.database.repository.OrderRepository;
 import org.example.service.dto.OrderFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
@@ -73,6 +74,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
 
         orderRepository.save(order);
         orderRepository.delete(order);
+        entityManager.flush();
         entityManager.clear();
 
         var deletedOrder = orderRepository.findById(order.getId());
@@ -84,7 +86,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
     void update() {
         var expectedOrder = orderRepository.findById(ORDER_ID_ONE).get();
         expectedOrder.setType(OrderType.READING_ROOM);
-        orderRepository.update(expectedOrder);
+        orderRepository.saveAndFlush(expectedOrder);
         entityManager.clear();
 
         var actualOrder = orderRepository.findById(ORDER_ID_ONE);
@@ -103,7 +105,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
                 .orderedDate(LocalDateTime.of(2018, 4, 22, 5, 24))
                 .build();
 
-        var orders = orderRepository.findByFilterQueryDsl(filter);
+        var orders = orderRepository.findByFilter(filter);
 
         assertNotNull(orders);
         assertThat(orders).hasSize(1);
@@ -121,7 +123,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
                 .status(OrderStatus.ORDERED)
                 .build();
 
-        var orders = orderRepository.findByFilterQueryDsl(filter);
+        var orders = orderRepository.findByFilter(filter);
 
         assertNotNull(orders);
         assertThat(orders).hasSize(2);
@@ -136,7 +138,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var filter = OrderFilter.builder()
                 .build();
 
-        var orders = orderRepository.findByFilterQueryDsl(filter);
+        var orders = orderRepository.findByFilter(filter);
 
         assertThat(orders).hasSize(orderRepository.findAll().size());
     }

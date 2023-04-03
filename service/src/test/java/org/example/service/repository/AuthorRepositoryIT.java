@@ -1,6 +1,7 @@
-package org.example.service.dao;
+package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.database.repository.AuthorRepository;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,7 @@ public class AuthorRepositoryIT extends IntegrationTestBase {
         var author = EntityTestUtil.getAuthor();
         authorRepository.save(author);
         authorRepository.delete(author);
+        entityManager.flush();
         entityManager.clear();
 
         var deletedAuthor = authorRepository.findById(author.getId());
@@ -61,7 +63,7 @@ public class AuthorRepositoryIT extends IntegrationTestBase {
     void update() {
         var expectedAuthor = authorRepository.findById(AUTHOR_ID_ONE).get();
         expectedAuthor.setName("Ernest Hemingway");
-        authorRepository.update(expectedAuthor);
+        authorRepository.saveAndFlush(expectedAuthor);
         entityManager.clear();
 
         var actualAuthor = authorRepository.findById(AUTHOR_ID_ONE);
