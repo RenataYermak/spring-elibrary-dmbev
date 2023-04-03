@@ -1,6 +1,7 @@
-package org.example.service.dao;
+package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.database.repository.CategoryRepository;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,7 @@ public class CategoryRepositoryIT extends IntegrationTestBase {
         categoryRepository.save(category);
 
         categoryRepository.delete(category);
+        entityManager.flush();
         entityManager.clear();
 
         var deletedCategory = categoryRepository.findById(category.getId());
@@ -62,7 +64,7 @@ public class CategoryRepositoryIT extends IntegrationTestBase {
     void update() {
         var expectedCategory = categoryRepository.findById(CATEGORY_ID_ONE).get();
         expectedCategory.setName("Science");
-        categoryRepository.update(expectedCategory);
+        categoryRepository.saveAndFlush(expectedCategory);
         entityManager.clear();
 
         var actualCategory = categoryRepository.findById(CATEGORY_ID_ONE);

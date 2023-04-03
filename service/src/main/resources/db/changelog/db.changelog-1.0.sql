@@ -1,15 +1,20 @@
+--liquibase formatted sql
+
+--changeset yermakrenata:1
 CREATE TABLE category
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
+--changeset yermakrenata:2
 CREATE TABLE author
 (
     id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
+--changeset yermakrenata:3
 CREATE TABLE book
 (
     id           BIGSERIAL PRIMARY KEY,
@@ -22,6 +27,7 @@ CREATE TABLE book
     picture      VARCHAR(128)
 );
 
+--changeset yermakrenata:4
 CREATE TABLE users
 (
     id        BIGSERIAL PRIMARY KEY,
@@ -32,6 +38,7 @@ CREATE TABLE users
     role      VARCHAR(10) NOT NULL
 );
 
+--changeset yermakrenata:5
 CREATE TABLE orders
 (
     id            BIGSERIAL PRIMARY KEY,
@@ -44,4 +51,3 @@ CREATE TABLE orders
     returned_date TIMESTAMP,
     rejected_date TIMESTAMP
 );
-
