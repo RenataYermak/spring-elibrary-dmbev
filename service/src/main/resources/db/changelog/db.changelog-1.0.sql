@@ -6,6 +6,7 @@ CREATE TABLE category
     id   SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
+--rollback DROP TABLE IF EXISTS category
 
 --changeset yermakrenata:2
 CREATE TABLE author
@@ -13,6 +14,7 @@ CREATE TABLE author
     id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
+--rollback DROP TABLE IF EXISTS author
 
 --changeset yermakrenata:3
 CREATE TABLE book
@@ -26,6 +28,7 @@ CREATE TABLE book
     number       INTEGER     NOT NULL,
     picture      VARCHAR(128)
 );
+--rollback DROP TABLE IF EXISTS book
 
 --changeset yermakrenata:4
 CREATE TABLE users
@@ -37,6 +40,7 @@ CREATE TABLE users
     password  VARCHAR(49) NOT NULL,
     role      VARCHAR(10) NOT NULL
 );
+--rollback DROP TABLE IF EXISTS users
 
 --changeset yermakrenata:5
 CREATE TABLE orders
@@ -51,3 +55,4 @@ CREATE TABLE orders
     returned_date TIMESTAMP,
     rejected_date TIMESTAMP
 );
+--rollback DROP TABLE IF EXISTS orders

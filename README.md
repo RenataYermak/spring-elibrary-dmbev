@@ -1,7 +1,5 @@
 ## **Task**
 
-1. All DAOs must be Spring Beans.
-2. You can use annotations and Java Config. No xml in code
 ### **Library**
 
 The reader has the opportunity to develop the search and order Books in the Catalog. The librarian gives the Reader a

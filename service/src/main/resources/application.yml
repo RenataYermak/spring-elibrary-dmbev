@@ -1,4 +1,8 @@
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    mode: HTML
+    suffix: .html
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
@@ -8,4 +12,5 @@ spring:
     properties.hibernate:
       show_sql: true
       format_sql: true
-      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      hbm2ddl.auto: validate
+    open-in-view: false
