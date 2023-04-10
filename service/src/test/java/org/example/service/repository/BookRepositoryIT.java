@@ -2,7 +2,7 @@ package org.example.service.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.repository.BookRepository;
-import org.example.service.dto.BookFilter;
+import org.example.service.dto.bookDto.BookFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
@@ -92,7 +92,7 @@ class BookRepositoryIT extends IntegrationTestBase {
                 .author("Agatha Christie")
                 .build();
 
-        var books = bookRepository.findByFilter(filter);
+        var books = bookRepository.findAllByFilter(filter);
 
         assertNotNull(books);
         assertThat(books).hasSize(1);
@@ -108,7 +108,7 @@ class BookRepositoryIT extends IntegrationTestBase {
                 .category("Detective")
                 .build();
 
-        var books = bookRepository.findByFilter(filter);
+        var books = bookRepository.findAllByFilter(filter);
 
         assertNotNull(books);
         assertThat(books).hasSize(2);
@@ -123,7 +123,7 @@ class BookRepositoryIT extends IntegrationTestBase {
         var filter = BookFilter.builder()
                 .build();
 
-        var books = bookRepository.findByFilter(filter);
+        var books = bookRepository.findAllByFilter(filter);
 
         assertThat(books).hasSize(bookRepository.findAll().size());
     }

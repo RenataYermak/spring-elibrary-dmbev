@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.OrderStatus;
 import org.example.service.database.entity.OrderType;
 import org.example.service.database.repository.OrderRepository;
-import org.example.service.dto.OrderFilter;
+import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
@@ -105,7 +105,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
                 .orderedDate(LocalDateTime.of(2018, 4, 22, 5, 24))
                 .build();
 
-        var orders = orderRepository.findByFilter(filter);
+        var orders = orderRepository.findAllByFilter(filter);
 
         assertNotNull(orders);
         assertThat(orders).hasSize(1);
@@ -123,7 +123,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
                 .status(OrderStatus.ORDERED)
                 .build();
 
-        var orders = orderRepository.findByFilter(filter);
+        var orders = orderRepository.findAllByFilter(filter);
 
         assertNotNull(orders);
         assertThat(orders).hasSize(2);
@@ -138,7 +138,7 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var filter = OrderFilter.builder()
                 .build();
 
-        var orders = orderRepository.findByFilter(filter);
+        var orders = orderRepository.findAllByFilter(filter);
 
         assertThat(orders).hasSize(orderRepository.findAll().size());
     }

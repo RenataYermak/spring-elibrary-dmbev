@@ -3,7 +3,7 @@ package org.example.service.repository;
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.Role;
 import org.example.service.database.repository.UserRepository;
-import org.example.service.dto.UserFilter;
+import org.example.service.dto.userDto.UserFilter;
 import org.example.service.integration.IntegrationTestBase;
 import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
@@ -105,10 +105,9 @@ public class UserRepositoryIT extends IntegrationTestBase {
                 .email("alex@gmail.com")
                 .firstname("Alex")
                 .lastname("Yermak")
-                .role(Role.USER)
                 .build();
 
-        var users = userRepository.findByFilter(filter);
+        var users = userRepository.findAllByFilter(filter);
 
         assertNotNull(users);
         assertThat(users).hasSize(1);
@@ -121,16 +120,13 @@ public class UserRepositoryIT extends IntegrationTestBase {
     @Test
     void findUsersByQueryWithOneParameters() {
         var filter = UserFilter.builder()
-                .role(Role.USER)
+                .lastname("Yermak")
                 .build();
 
-        var users = userRepository.findByFilter(filter);
+        var users = userRepository.findAllByFilter(filter);
 
         assertNotNull(users);
-        assertThat(users).hasSize(3);
-        assertThat(users.get(0).getRole()).isEqualTo(Role.USER);
-        assertThat(users.get(1).getRole()).isEqualTo(Role.USER);
-        assertThat(users.get(2).getRole()).isEqualTo(Role.USER);
+        assertThat(users).hasSize(2);
     }
 
     @Test
@@ -138,7 +134,7 @@ public class UserRepositoryIT extends IntegrationTestBase {
         var filter = UserFilter.builder()
                 .build();
 
-        var users = userRepository.findByFilter(filter);
+        var users = userRepository.findAllByFilter(filter);
 
         assertNotNull(users);
         assertThat(users).hasSize(userRepository.findAll().size());

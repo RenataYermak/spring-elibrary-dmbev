@@ -3,8 +3,8 @@ package org.example.service.database.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.AllArgsConstructor;
 import org.example.service.database.entity.Book;
-import org.example.service.database.querydsl.QPredicate;
-import org.example.service.dto.BookFilter;
+import org.example.service.database.querydsl.QPredicates;
+import org.example.service.dto.bookDto.BookFilter;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -19,12 +19,12 @@ public class BookFilterRepositoryImpl implements BookFilterRepository {
     private final EntityManager entityManager;
 
     @Override
-    public List<Book> findByFilter(BookFilter filter) {
-        var predicate = QPredicate.builder()
+    public List<Book> findAllByFilter(BookFilter filter) {
+        var predicate = QPredicates.builder()
                 .add(filter.publishYear(), book.publishYear::eq)
                 .add(filter.category(), book.category.name::eq)
                 .add(filter.author(), book.author.name::eq)
-                .buildAnd();
+                .build();
 
         return new JPAQuery<Book>(entityManager)
                 .select(book)
