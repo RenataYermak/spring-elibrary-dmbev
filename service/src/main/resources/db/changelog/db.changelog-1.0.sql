@@ -3,7 +3,7 @@
 --changeset yermakrenata:1
 CREATE TABLE category
 (
-    id   serial PRIMARY KEY,
+    id   SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 --rollback DROP TABLE IF EXISTS category
@@ -11,7 +11,7 @@ CREATE TABLE category
 --changeset yermakrenata:2
 CREATE TABLE author
 (
-    id   bigserial PRIMARY KEY,
+    id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 --rollback DROP TABLE IF EXISTS author
@@ -19,12 +19,12 @@ CREATE TABLE author
 --changeset yermakrenata:3
 CREATE TABLE book
 (
-    id           bigserial PRIMARY KEY,
+    id           BIGSERIAL PRIMARY KEY,
     title        VARCHAR(50) NOT NULL,
-    author_id    bigint      NOT NULL REFERENCES author,
+    author_id    BIGINT      NOT NULL REFERENCES author,
     publish_year INTEGER,
     category_id  INTEGER     NOT NULL REFERENCES category,
-    description  text,
+    description  TEXT,
     number       INTEGER     NOT NULL,
     picture      VARCHAR(128)
 );
@@ -33,7 +33,7 @@ CREATE TABLE book
 --changeset yermakrenata:4
 CREATE TABLE users
 (
-    id        bigserial PRIMARY KEY,
+    id        BIGSERIAL PRIMARY KEY,
     firstname VARCHAR(25) NOT NULL,
     lastname  VARCHAR(25) NOT NULL,
     email     VARCHAR(50) NOT NULL UNIQUE,
@@ -45,9 +45,9 @@ CREATE TABLE users
 --changeset yermakrenata:5
 CREATE TABLE orders
 (
-    id            bigserial PRIMARY KEY,
-    book_id       bigint      NOT NULL REFERENCES book,
-    user_id       bigint      NOT NULL REFERENCES users,
+    id            BIGSERIAL PRIMARY KEY,
+    book_id       BIGINT      NOT NULL REFERENCES book,
+    user_id       BIGINT      NOT NULL REFERENCES users,
     status        VARCHAR(20) NOT NULL,
     type          VARCHAR(20) NOT NULL,
     ordered_date  TIMESTAMP   NOT NULL,
