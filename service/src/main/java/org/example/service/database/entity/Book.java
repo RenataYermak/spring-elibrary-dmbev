@@ -41,6 +41,7 @@ public class Book implements BaseEntity<Long> {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Category category;
 
+    @Column
     private Integer publishYear;
 
     @Column(length = 3000)

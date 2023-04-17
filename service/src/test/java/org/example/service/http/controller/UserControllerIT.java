@@ -95,7 +95,7 @@ public class UserControllerIT extends IntegrationTestBase {
                         .param(firstname, "Renata")
                         .param(lastname, "Yermak")
                         .param(email, "renatayermak@gmail.com")
-                        .param(password, "1212")
+                        .param(password, "12121997")
                         .param(role, "USER")
                 )
                 .andExpectAll(

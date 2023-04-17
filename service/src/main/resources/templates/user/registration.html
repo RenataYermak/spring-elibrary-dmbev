@@ -12,7 +12,7 @@
 </div>
 <div class="container mt-5" mb-5>
     <h1><span>Registration</span></h1>
-    <form action="/users" method="post" th:object="${user}">
+    <form action="/users" method="post">
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" placeholder="First name"
                    class="form-control"><br>
@@ -28,17 +28,9 @@
             <button type="submit" class="btn btn-success"><span>Register</span></button>
         </div>
     </form>
-    <!--        <input type="text" name="firstname" placeholder="First name" class="form-control"><br>-->
-    <!--        <input type="text" name="lastname" placeholder="Last name" class="form-control"><br>-->
-    <!--        <input type="text" name="email" placeholder="Email" class="form-control"><br>-->
-    <!--        <input type="password" name="password" placeholder="Password" class="form-control"><br>-->
-    <!--        <div th:each="role : ${roles}">-->
-    <!--            <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">-->
-    <!--            <label th:for="${role}" th:text="${role}">Role name</label>-->
-    <!--        </div>-->
-    <!--        <br>-->
-    <!--        <button type="submit" class="btn btn-success"><span>Registration User</span></button>-->
-    <!--    </form>-->
+</div>
+<div th:if="${errors}">
+    <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>
 </div>
 <div class="container">
     <div th:insert="include/footer :: footer"></div>
