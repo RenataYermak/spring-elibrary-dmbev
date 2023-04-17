@@ -1,13 +1,15 @@
 <div th:fragment="header">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-4 d-flex align-items-center">
-            <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+            <a href="/books" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
                 <h1 class="title" style="color:black;"><span class="header-title-sp" style="color: #7dcbf9">e</span>Library
                 </h1>
             </a>
         </div>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li><a href="/users" class="nav-link px-2 link-dark"><span>Users</span></a></li>
+            <li><a href="/books" class="nav-link px-2 link-dark"><span>Books</span></a></li>
+            <li><a href="/books/add" class="nav-link px-2 link-dark"><span>Add Book</span></a></li>
         </ul>
     </header>
 </div>

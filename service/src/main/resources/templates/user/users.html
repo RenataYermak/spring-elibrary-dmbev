@@ -59,6 +59,9 @@
         </tbody>
     </table>
 </div>
+<div th:if="${errors}">
+    <p style="color:red" th:each="error:${erroes}" th:text="${error.defaultMessage}"> Error message</p>
+</div>
 <div class="container">
     <div th:insert="include/footer :: footer"></div>
 </div>
