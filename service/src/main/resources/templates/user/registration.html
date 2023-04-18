@@ -18,7 +18,7 @@
                    class="form-control"><br>
             <input type="text" th:value="*{lastname}" name="lastname" placeholder="Last name" class="form-control"><br>
             <input type="text" th:value="*{email}" name="email" placeholder="Email" class="form-control"><br>
-            <input type="password" th:value="*{password}" name="password" placeholder="Password"
+            <input type="password" name="rawPassword" placeholder="Password"
                    class="form-control"><br>
             <div th:each="role : ${roles}">
                 <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">

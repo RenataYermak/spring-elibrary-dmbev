@@ -43,7 +43,7 @@ public class User implements BaseEntity<Long> {
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 49)
+    @Column(nullable = false, length = 128)
     private String password;
 
     @Column(nullable = false, length = 10)

@@ -74,7 +74,7 @@ public class UserController {
             return "redirect:/users/registration";
         }
         userService.create(user);
-        return "redirect:/users";
+        return "redirect:/login";
     }
 
     @GetMapping("/{id}/update")

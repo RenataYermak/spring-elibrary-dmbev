@@ -3,8 +3,10 @@ package org.example.service.dto.userDto;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.example.service.database.entity.Role;
+import org.example.service.validation.group.CreateAction;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -23,9 +25,9 @@ public class UserCreateEditDto {
     @Email
     String email;
 
-    @NotEmpty
+    @NotBlank(groups = CreateAction.class)
     @Size(min = 8, max = 49)
-    String password;
+    String rawPassword;
 
     Role role;
 }
