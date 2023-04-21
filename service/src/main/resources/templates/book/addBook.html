@@ -12,7 +12,7 @@
 </div>
 <div class="container mt-5" mb-5>
     <h1><span>Add book</span></h1>
-    <form action="/books" enctype="multipart/form-data" method="post">
+    <form th:action="@{/books}" enctype="multipart/form-data" method="post">
         <div th:each="book : ${book}" th:object="${book}">
             <input th:value="*{picture}" type="file" name="picture"><br><br>
             <input type="text" th:value="*{title}" name="title" placeholder="Title" class="form-control"><br>

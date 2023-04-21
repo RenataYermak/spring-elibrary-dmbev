@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -202,7 +203,7 @@ class BookServiceTest {
                 2000,
                 "description",
                 12,
-                "1.png"
+                new MockMultipartFile("test", new byte[0])
         );
     }
 
@@ -214,7 +215,7 @@ class BookServiceTest {
                 2021,
                 "description",
                 12,
-                "3.png"
+                new MockMultipartFile("test", new byte[0])
         );
     }
 

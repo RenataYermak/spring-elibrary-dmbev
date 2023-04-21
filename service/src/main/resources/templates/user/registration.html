@@ -12,7 +12,7 @@
 </div>
 <div class="container mt-5" mb-5>
     <h1><span>Registration</span></h1>
-    <form action="/users" method="post">
+    <form th:action="@{/users}" method="post">
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" placeholder="First name"
                    class="form-control"><br>

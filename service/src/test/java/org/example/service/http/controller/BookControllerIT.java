@@ -65,7 +65,7 @@ public class BookControllerIT extends IntegrationTestBase {
     }
 
     @Test
-    void adBook() throws Exception {
+    void addBook() throws Exception {
         mockMvc.perform(get("/books/add"))
                 .andExpectAll(
                         status().is2xxSuccessful(),
