@@ -30,7 +30,7 @@
                         <hr/>
                         <p class="nav-link px-2 link-dark" th:text="${book.description}"/>
                         <form action="/orders" method="post" th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
-                            <button class="btn btn-success" type="submit"><span>Order</span></button>
+                            <button class="btn btn-success" type="submit"><span th:text="#{book.button.order}"></span></button>
                         </form>
                     </div>
                 </div>

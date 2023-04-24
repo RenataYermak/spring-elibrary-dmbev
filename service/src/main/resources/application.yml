@@ -18,6 +18,8 @@ spring:
             clientId: 168934831727-ops5bmn4li6t9fiel06dc827lfcpl6tv.apps.googleusercontent.com
             clientSecret: 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
             redirectUri: http://localhost:8080/login/oauth2/code/google
+  messages:
+    basename: messages
 springdoc:
   swagger-ui:
     oauth:

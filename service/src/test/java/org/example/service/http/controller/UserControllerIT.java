@@ -12,6 +12,7 @@ import static org.example.service.dto.userDto.UserCreateEditDto.Fields.firstname
 import static org.example.service.dto.userDto.UserCreateEditDto.Fields.lastname;
 import static org.example.service.dto.userDto.UserCreateEditDto.Fields.rawPassword;
 import static org.example.service.dto.userDto.UserCreateEditDto.Fields.role;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,7 +52,7 @@ public class UserControllerIT extends IntegrationTestBase {
     @Test
     void create() throws Exception {
         mockMvc.perform(post("/users")
-                        .with(user("test@gmail.com").authorities(Role.ADMIN))
+                        .with(csrf())
                         .param(firstname, "test")
                         .param(lastname, "test")
                         .param(email, "test1@gmail.com")
@@ -60,7 +61,7 @@ public class UserControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/users")
+                        redirectedUrl("/login")
                 );
     }
 
@@ -95,7 +96,7 @@ public class UserControllerIT extends IntegrationTestBase {
     @Test
     void update() throws Exception {
         mockMvc.perform(post("/users/1/update")
-                        .with(user("test@gmail.com").authorities(Role.ADMIN))
+                        .with(csrf())
                         .param(firstname, "Renata")
                         .param(lastname, "Yermak")
                         .param(email, "renatayermak@gmail.com")
@@ -111,7 +112,7 @@ public class UserControllerIT extends IntegrationTestBase {
     @Test
     void delete() throws Exception {
         mockMvc.perform(post("/users/1/delete")
-                .with(user("test@gmail.com").authorities(Role.ADMIN)))
+                .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/users")

@@ -11,11 +11,11 @@
     </header>
 </div>
 <div class="container mt-5" mb-5>
-    <h1><span>Add book</span></h1>
+    <h2><span th:text="#{page.title.add_book}"></span></h2>
     <form th:action="@{/books}" enctype="multipart/form-data" method="post">
         <div th:each="book : ${book}" th:object="${book}">
             <input th:value="*{picture}" type="file" name="picture"><br><br>
-            <input type="text" th:value="*{title}" name="title" placeholder="Title" class="form-control"><br>
+            <input type="text" th:value="*{title}" name="title" th:placeholder="#{book.label.title}" class="form-control"><br>
             <select name="authorId" class="form-control">
                 <div th:each="author : ${authors}">
                     <option selected th:value="${author.id}"><h4 th:text="${author.name}"/></option>
@@ -28,13 +28,13 @@
                 </div>
             </select>
             <br>
-            <textarea name="description" th:value="*{description}" placeholder="Description"
-                      class="form-control"></textarea><br>
-            <input type="number" th:value="*{number}" th:default="0" name="number" placeholder="Number"
+            <textarea name="description" th:placeholder="#{book.label.description}" class="form-control"
+                      th:text="*{description}"></textarea><br>
+            <input type="number" th:value="*{number}" name="number" th:placeholder="#{book.label.number}"
                    class="form-control"><br>
-            <input type="number" th:value="*{publishYear}" th:default="0" name="publishYear" placeholder="Publish year"
+            <input type="number" th:value="*{publishYear}" name="publishYear" th:placeholder="#{book.label.publish_year}"
                    class="form-control"><br>
-            <button type="submit" class="btn btn-success"><span>Add Book</span></button>
+            <button type="submit" class="btn btn-success"><span th:text="#{book.button.add}"></span></button>
         </div>
     </form>
 </div>

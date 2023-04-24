@@ -11,28 +11,28 @@
     </header>
 </div>
 <div class="container mt-5" mb-5>
-    <h1><span>Edit User</span></h1>
+    <h2><span th:text="#{page.title.user_edit}"></span></h2>
     <form method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div th:each="user : ${user}" th:object="${user}">
-            <input type="text" th:value="*{firstname}" name="firstname" placeholder="First name"
+            <input type="text" th:value="*{firstname}" name="firstname" th:placeholder="#{user.label.first_name}"
                    class="form-control"><br>
-            <input type="text" th:value="*{lastname}" name="lastname" placeholder="Last name" class="form-control"><br>
-            <input type="text" th:value="*{email}" name="email" placeholder="Email" class="form-control"><br>
-            <input type="password" name="password" placeholder="Password"
+            <input type="text" th:value="*{lastname}" name="lastname" th:placeholder="#{user.label.second_name}" class="form-control"><br>
+            <input type="text" th:value="*{email}" name="email" th:placeholder="#{user.label.email}" class="form-control"><br>
+            <input type="password" name="password" th:placeholder="#{user.label.password}"
                    class="form-control"><br>
             <div th:each="role : ${roles}">
                 <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
-                <label th:for="${role}" th:text="${role}">Role name</label>
+                <label th:for="${role}" th:text="${role}"><span th:text="#{register.label.role}"></span></label>
             </div>
             <br>
-            <button type="submit" class="btn btn-success"><span>Submit</span></button>
+            <button type="submit" class="btn btn-success"><span th:text="#{user.button.submit}"></span></button>
         </div>
     </form>
     <br>
     <div th:each="user : ${user}">
         <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${user.role.name() == 'ADMIN'}" method="post">
-            <button class="btn btn-danger" type="submit"><span>Delete</span></button>
+            <button class="btn btn-danger" type="submit"><span th:text="#{users.button.delete}"></span></button>
         </form>
     </div>
 </div>

@@ -10,13 +10,13 @@
 <body>
 <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="text-center">
-        <h1 class="display-1 fw-bold">500</h1>
-        <p class="fs-3"><span class="text-danger">Opps!</span> Something went wrong.</p>
+        <h1 class="display-1 fw-bold"><span th:text="#{error500.page}"></span></h1>
+        <p class="fs-3"><span class="text-danger" th:text="#{error.message.opps}"></span><span th:text="#{error500.message1}"></span></p>
         <p class="lead">
-            Unfortunately we're having trouble loading the page you are looking for.<br>
-            Please come back in a while.
+            <span th:text="#{error500.message2}"></span><br>
+            <span th:text="#{error500.message3}"></span>
         </p>
-        <a href="/users" class="btn btn-primary">Go Home</a>
+        <a href="/books" class="btn btn-primary"><span th:text="#{error.go_home}"></span></a>
     </div>
 </div>
 </body>

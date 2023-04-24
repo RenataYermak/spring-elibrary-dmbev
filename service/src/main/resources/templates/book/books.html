@@ -10,7 +10,6 @@
     </header>
 </div>
 <main>
-
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
@@ -29,15 +28,15 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <a th:href="@{/books/{bookId}(bookId=${book.id})}"
-                                           class="btn btn-sm btn-outline-secondary"><span>View</span></a>
+                                           class="btn btn-sm btn-outline-secondary"><span th:text="#{book.view}"></span></a>
                                         <div class="btn-group" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
                                             <a th:href="@{/books/{bookId}/update(bookId=${book.id})}"
-                                               class="btn btn-sm btn-outline-secondary"><span>Edit</span></a>
+                                               class="btn btn-sm btn-outline-secondary"><span th:text="#{book.button.edit}"></span></a>
                                         </div>
                                         <div class="btn-group" th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
                                             <form action="/orders" method="post">
                                                 <button class="btn btn-sm btn-outline-secondary" type="submit">
-                                                    <span>Order</span></button>
+                                                    <span th:text="#{book.button.order}"></span></button>
                                             </form>
                                         </div>
                                     </div>

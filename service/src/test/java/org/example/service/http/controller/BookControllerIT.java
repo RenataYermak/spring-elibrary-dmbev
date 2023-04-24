@@ -14,6 +14,7 @@ import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.number;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.picture;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.publishYear;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.title;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -52,7 +53,7 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void create() throws Exception {
         mockMvc.perform(post("/books")
-                        .with(user("test@gmail.com").authorities(Role.ADMIN))
+                        .with(csrf())
                         .param(title, "test")
                         .param(categoryId, "1")
                         .param(publishYear, "2021")
@@ -104,14 +105,15 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void update() throws Exception {
         mockMvc.perform(post("/books/2/update")
-                        .with(user("test@gmail.com").authorities(Role.ADMIN))
+                        .with(csrf())
                         .param(title, "Death on the Nile")
                         .param(authorId, "3")
                         .param(categoryId, "1")
                         .param(publishYear, "1977")
                         .param(description, "description")
                         .param(number, "5")
-                        .param(picture, "1.png")
+                        .param(picture, "new MockMultipartFile(\"test\", new byte[0])")
+
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
@@ -122,7 +124,7 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void delete() throws Exception {
         mockMvc.perform(post("/books/1/delete")
-                        .with(user("test@gmail.com").authorities(Role.ADMIN)))
+                        .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/books")
