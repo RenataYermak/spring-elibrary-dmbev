@@ -3,7 +3,6 @@ package org.example.service.service;
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.querydsl.QPredicates;
 import org.example.service.database.repository.OrderRepository;
-import org.example.service.dto.orderDto.OrderCreateEditDto;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.dto.orderDto.OrderReadDto;
 import org.example.service.mapper.orderMapper.OrderCreateEditMapper;
@@ -49,23 +48,6 @@ public class OrderService {
         return orderRepository.findAll().stream()
                 .map(orderReadMapper::map)
                 .toList();
-    }
-
-    @Transactional
-    public OrderReadDto create(OrderCreateEditDto orderDto) {
-        return Optional.of(orderDto)
-                .map(orderCreateEditMapper::map)
-                .map(orderRepository::save)
-                .map(orderReadMapper::map)
-                .orElseThrow();
-    }
-
-    @Transactional
-    public Optional<OrderReadDto> update(Long id, OrderCreateEditDto orderDto) {
-        return orderRepository.findById(id)
-                .map(entity -> orderCreateEditMapper.map(orderDto, entity))
-                .map(orderRepository::saveAndFlush)
-                .map(orderReadMapper::map);
     }
 
     @Transactional

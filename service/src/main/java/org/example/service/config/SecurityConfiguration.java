@@ -3,6 +3,7 @@ package org.example.service.config;
 import lombok.RequiredArgsConstructor;
 import org.example.service.service.UserService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,7 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
                         .antMatchers("/login", "/users/registration", "/books", "/users", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/users/**").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN.getAuthority())
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
@@ -51,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         return userRequest -> {
             String email = userRequest.getIdToken().getClaim("email");
+
             UserDetails userDetails = userService.loadUserByUsername(email);
 
             DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());

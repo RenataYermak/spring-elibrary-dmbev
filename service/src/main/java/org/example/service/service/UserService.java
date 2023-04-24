@@ -56,6 +56,11 @@ public class UserService implements UserDetailsService {
                 .map(userReadMapper::map);
     }
 
+    public Optional<UserReadDto> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userReadMapper::map);
+    }
+
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {

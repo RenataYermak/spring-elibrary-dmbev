@@ -1,6 +1,7 @@
 package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.database.entity.Role;
 import org.example.service.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +14,7 @@ import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.number;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.picture;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.publishYear;
 import static org.example.service.dto.bookDto.BookCreateEditDto.Fields.title;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -50,6 +52,7 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void create() throws Exception {
         mockMvc.perform(post("/books")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN))
                         .param(title, "test")
                         .param(categoryId, "1")
                         .param(publishYear, "2021")
@@ -66,7 +69,8 @@ public class BookControllerIT extends IntegrationTestBase {
 
     @Test
     void addBook() throws Exception {
-        mockMvc.perform(get("/books/add"))
+        mockMvc.perform(get("/books/add")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN)))
                 .andExpectAll(
                         status().is2xxSuccessful(),
                         view().name("book/addBook"),
@@ -79,6 +83,7 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void bookEdit() throws Exception {
         mockMvc.perform(get("/books/1/update")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN))
                         .param(title, "test1")
                         .param(categoryId, "1")
                         .param(publishYear, "2022")
@@ -99,6 +104,7 @@ public class BookControllerIT extends IntegrationTestBase {
     @Test
     void update() throws Exception {
         mockMvc.perform(post("/books/2/update")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN))
                         .param(title, "Death on the Nile")
                         .param(authorId, "3")
                         .param(categoryId, "1")
@@ -115,7 +121,8 @@ public class BookControllerIT extends IntegrationTestBase {
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(post("/books/1/delete"))
+        mockMvc.perform(post("/books/1/delete")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN)))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/books")

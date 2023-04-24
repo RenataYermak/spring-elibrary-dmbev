@@ -51,9 +51,10 @@ public class UserControllerIT extends IntegrationTestBase {
     @Test
     void create() throws Exception {
         mockMvc.perform(post("/users")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN))
                         .param(firstname, "test")
                         .param(lastname, "test")
-                        .param(email, "test@gmail.com")
+                        .param(email, "test1@gmail.com")
                         .param(rawPassword, "test1212")
                         .param(role, "ADMIN")
                 )
@@ -94,6 +95,7 @@ public class UserControllerIT extends IntegrationTestBase {
     @Test
     void update() throws Exception {
         mockMvc.perform(post("/users/1/update")
+                        .with(user("test@gmail.com").authorities(Role.ADMIN))
                         .param(firstname, "Renata")
                         .param(lastname, "Yermak")
                         .param(email, "renatayermak@gmail.com")
@@ -108,7 +110,8 @@ public class UserControllerIT extends IntegrationTestBase {
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(post("/users/1/delete"))
+        mockMvc.perform(post("/users/1/delete")
+                .with(user("test@gmail.com").authorities(Role.ADMIN)))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/users")
