@@ -33,7 +33,7 @@ VALUES (1, 'renatayermak@gmail.com', 'Renata', 'Yermak', '1212', 'ADMIN'),
 SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 
 INSERT INTO orders (id, ordered_date, status, type, book_id, user_id)
-VALUES (1, '2023-01-10 8:54', 'RESERVED', 'SEASON_TICKET', (SELECT id FROM book WHERE title = 'Death on the Nile'),
+VALUES (1, '2023-01-10 8:54', 'RETURNED', 'SEASON_TICKET', (SELECT id FROM book WHERE title = 'Death on the Nile'),
         (SELECT id FROM users WHERE email = 'renatayermak@gmail.com')),
        (2, '2023-03-04 6:54', 'ORDERED', 'READING_ROOM', (SELECT id FROM book WHERE title = 'The Shining'),
         (SELECT id FROM users WHERE email = 'renatayermak@gmail.com')),
@@ -41,7 +41,7 @@ VALUES (1, '2023-01-10 8:54', 'RESERVED', 'SEASON_TICKET', (SELECT id FROM book 
         (SELECT id FROM users WHERE email = 'alex@gmail.com')),
        (4, '2018-04-22 5:24', 'ORDERED', 'READING_ROOM', (SELECT id FROM book WHERE title = 'The Premature Burial'),
         (SELECT id FROM users WHERE email = 'eva@gmail.com')),
-       (5, '2023-08-12 17:54', 'REJECTED', 'READING_ROOM',
+       (5, '2023-08-12 17:54', 'RETURNED', 'READING_ROOM',
         (SELECT id FROM book WHERE title = 'The Memoirs of Sherlock Holmes'),
         (SELECT id FROM users WHERE email = 'nikita@gmail.com'));
 SELECT SETVAL('orders_id_seq', (SELECT MAX(id) FROM orders));

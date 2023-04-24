@@ -13,6 +13,7 @@
 <div class="container mt-5" mb-5>
     <h1><span>Edit User</span></h1>
     <form method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" placeholder="First name"
                    class="form-control"><br>
@@ -30,7 +31,7 @@
     </form>
     <br>
     <div th:each="user : ${user}">
-        <form th:action="'/users/' + ${user.id} + '/delete'" th:if="${user.role.name() == 'ADMIN'}" method="post">
+        <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${user.role.name() == 'ADMIN'}" method="post">
             <button class="btn btn-danger" type="submit"><span>Delete</span></button>
         </form>
     </div>

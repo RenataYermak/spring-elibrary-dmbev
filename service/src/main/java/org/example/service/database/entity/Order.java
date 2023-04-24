@@ -45,8 +45,5 @@ public class Order implements BaseEntity<Long> {
 
     @Column(nullable = false)
     private LocalDateTime orderedDate;
-
-    private LocalDateTime reservedDate;
     private LocalDateTime returnedDate;
-    private LocalDateTime rejectedDate;
 }

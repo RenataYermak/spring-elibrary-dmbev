@@ -37,7 +37,7 @@ CREATE TABLE users
     firstname VARCHAR(25) NOT NULL,
     lastname  VARCHAR(25) NOT NULL,
     email     VARCHAR(50) NOT NULL UNIQUE,
-    password  VARCHAR(49) NOT NULL,
+    password  VARCHAR(128) NOT NULL,
     role      VARCHAR(10) NOT NULL
 );
 --rollback DROP TABLE IF EXISTS users

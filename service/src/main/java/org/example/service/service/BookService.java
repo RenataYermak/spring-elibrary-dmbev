@@ -12,6 +12,7 @@ import org.example.service.mapper.bookMapper.BookCreateEditMapper;
 import org.example.service.mapper.bookMapper.BookReadMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -69,6 +70,7 @@ public class BookService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public BookReadDto create(BookCreateEditDto bookDto) {
         return Optional.of(bookDto)
                 .map(dto -> {
@@ -81,6 +83,7 @@ public class BookService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<BookReadDto> update(Long id, BookCreateEditDto bookDto) {
         return bookRepository.findById(id)
                 .map(entity -> {
@@ -92,6 +95,7 @@ public class BookService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Long id) {
         return bookRepository.findById(id)
                 .map(entity -> {

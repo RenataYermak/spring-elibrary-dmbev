@@ -7,9 +7,21 @@
             </a>
         </div>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/users" class="nav-link px-2 link-dark"><span>Users</span></a></li>
+            <div th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
+                <li><a href="/users" class="nav-link px-2 link-dark"><span>My Profile</span></a></li>
+                <li><a href="/orders" class="nav-link px-2 link-dark"><span>My Orders</span></a></li>
+            </div>
+            <div th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
+                <li><a href="/users" class="nav-link px-2 link-dark"><span>Users</span></a></li>
+                <li><a href="/books/add" class="nav-link px-2 link-dark"><span>Add Book</span></a></li>
+                <li><a href="/orders" class="nav-link px-2 link-dark"><span>Orders</span></a></li>
+            </div>
             <li><a href="/books" class="nav-link px-2 link-dark"><span>Books</span></a></li>
-            <li><a href="/books/add" class="nav-link px-2 link-dark"><span>Add Book</span></a></li>
         </ul>
+        <div class="col-md-3 text-end">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-primary"><span>Logout</span></button>
+            </form>
+        </div>
     </header>
 </div>
