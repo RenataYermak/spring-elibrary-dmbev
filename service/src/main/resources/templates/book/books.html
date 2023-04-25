@@ -29,14 +29,36 @@
                                     <div class="btn-group">
                                         <a th:href="@{/books/{bookId}(bookId=${book.id})}"
                                            class="btn btn-sm btn-outline-secondary"><span th:text="#{book.view}"></span></a>
-                                        <div class="btn-group" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
+                                        <div class="btn-group"
+                                             th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
                                             <a th:href="@{/books/{bookId}/update(bookId=${book.id})}"
-                                               class="btn btn-sm btn-outline-secondary"><span th:text="#{book.button.edit}"></span></a>
+                                               class="btn btn-sm btn-outline-secondary"><span
+                                                    th:text="#{book.button.edit}"></span></a>
                                         </div>
                                         <div class="btn-group" th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
                                             <form action="/orders" method="post">
-                                                <button class="btn btn-sm btn-outline-secondary" type="submit">
-                                                    <span th:text="#{book.button.order}"></span></button>
+                                                <input type="hidden" name="bookId" th:value="${book.id}" />
+                                                <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
+                                                <th:block th:if="${book.number > 0}">
+                                                    <select name="type" style="width: 100%;">
+                                                        <option value="reading_room" selected="selected"><span
+                                                                th:text="#{table.label.season_ticket}"></span></option>
+                                                        <option value="season_ticket"><span
+                                                                th:text="#{table.label.reading_room}"></span></option>
+                                                    </select>
+                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                                                        <span th:text="#{book.button.order}"></span></button>
+                                                </th:block>
+                                                <th:block th:unless="${book.number <= 0}">
+                                                    <select name="type" style="width: 100%;" disabled>
+                                                        <option value="reading_room" selected="selected"><span
+                                                                th:text="#{table.label.season_ticket}"></span></option>
+                                                        <option value="season_ticket"><span
+                                                                th:text="#{table.label.reading_room}"></span></option>
+                                                    </select>
+                                                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                                                        <span th:text="#{book.button.order}"></span></button>
+                                                </th:block>
                                             </form>
                                         </div>
                                     </div>

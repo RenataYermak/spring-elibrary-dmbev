@@ -2,7 +2,9 @@ package org.example.service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.querydsl.QPredicates;
+import org.example.service.database.repository.BookRepository;
 import org.example.service.database.repository.OrderRepository;
+import org.example.service.dto.orderDto.OrderCreateEditDto;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.dto.orderDto.OrderReadDto;
 import org.example.service.mapper.orderMapper.OrderCreateEditMapper;
@@ -22,6 +24,7 @@ import static org.example.service.database.entity.QOrder.order;
 @Transactional(readOnly = true)
 public class OrderService {
 
+    private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
     private final OrderReadMapper orderReadMapper;
     private final OrderCreateEditMapper orderCreateEditMapper;
@@ -60,4 +63,21 @@ public class OrderService {
                 })
                 .orElse(false);
     }
+
+    @Transactional
+    public OrderReadDto create(OrderCreateEditDto orderDto) {
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
