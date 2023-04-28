@@ -2,16 +2,22 @@ package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.dto.PageResponse;
+import org.example.service.dto.orderDto.OrderCreateDto;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.service.OrderService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/orders")
@@ -23,10 +29,22 @@ public class OrderController {
     @GetMapping
     public String findAll(Model model,
                           OrderFilter filter,
-                          Pageable pageable) {
+                          @PageableDefault Pageable pageable) {
         var page = orderService.findAll(filter, pageable);
         model.addAttribute("orders", PageResponse.of(page));
         model.addAttribute("filter", filter);
+        return "order/orders";
+    }
+
+    @GetMapping("/{userId}")
+    public String findAllByUserId(Model model,
+                                  @PathVariable("userId") Long userId,
+                                  OrderFilter filter,
+                                  @PageableDefault Pageable pageable) {
+        var page = orderService.findAll(filter, pageable);
+        model.addAttribute("orders", PageResponse.of(page));
+        model.addAttribute("filter", filter);
+        model.addAttribute("userId", orderService.findAllByUserId(userId));
         return "order/orders";
     }
 
@@ -38,5 +56,34 @@ public class OrderController {
                     return "order/order";
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping
+    public String create(@ModelAttribute OrderCreateDto order,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("order", order);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/books";
+        }
+        orderService.create(order);
+        return "redirect:/orders";
+    }
+
+    @RequestMapping("/{id}/update")
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute OrderCreateDto order) {
+        return orderService.update(id, order)
+                .map(it -> "redirect:/orders")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long orderId) {
+        if (!orderService.delete(orderId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/orders";
     }
 }

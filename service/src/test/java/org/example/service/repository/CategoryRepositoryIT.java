@@ -3,7 +3,6 @@ package org.example.service.repository;
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.repository.CategoryRepository;
 import org.example.service.integration.IntegrationTestBase;
-import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;

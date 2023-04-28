@@ -6,8 +6,9 @@
                 </h1>
             </a>
         </div>
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/users" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
+<!--        "@{/orders/{userId}(userId=${#authentication.principal.id})}" -->
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="margin-left: 50px">
+            <li><a th:href="@{/users/{userId}/update(userId=${#authentication.principal.id})}" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
                    class="nav-link px-2 link-dark"><span th:text="#{page.title.my_profile}"></span></a></li>
             <li><a href="/orders" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
                    class="nav-link px-2 link-dark"><span th:text="#{page.title.my_orders}"></span></a></li>
@@ -22,13 +23,13 @@
             <li><a href="/about" class="nav-link px-2 link-dark"><span th:text="#{page.title.about_library}"></span></a>
             </li>
         </ul>
-        <div class="col-md-3 text-end">
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="btn btn-primary"><span th:text="#{header.log_out}"></span></button>
-            </form>
-        </div>
-        <div class="container">
+        <div style="display: inline-block;margin-left: 60px" >
             <header th:insert="include/locale :: locale"></header>
+        </div>
+        <div  style="display: inline-block;">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-primary" style="display: inline-block;background-color: royalblue"><span th:text="#{header.log_out}"></span></button>
+            </form>
         </div>
     </header>
 </div>

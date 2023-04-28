@@ -12,7 +12,8 @@
     </header>
 </div>
 <div class="container mt-5" mb-5>
-    <h1><span th:text="#{page.title.book_edit}"></span></h1>
+    <h3><span th:text="#{page.title.book_edit}"></span></h3>
+    <br>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div th:each="book : ${book}" th:object="${book}">

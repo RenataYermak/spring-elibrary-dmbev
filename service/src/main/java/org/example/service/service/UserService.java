@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
         var predicate = QPredicates.builder()
                 .add(filter.firstname(), user.firstname::containsIgnoreCase)
                 .add(filter.lastname(), user.lastname::containsIgnoreCase)
-                .add(filter.email(), user.email::eq)
+                .add(filter.email(), user.email::containsIgnoreCase)
                 .build();
 
         return userRepository.findAll(predicate, pageable)
@@ -51,6 +51,7 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
+
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
                 .map(userReadMapper::map);
@@ -62,7 +63,6 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
         return Optional.of(userDto)
                 .map(userCreateEditMapper::map)
@@ -94,11 +94,12 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(user -> new org.springframework.security.core.userdetails.User(
+                .map(user -> new CustomUser(
                         user.getEmail(),
                         user.getPassword(),
-                        Collections.singleton(user.getRole())
+                        Collections.singleton(user.getRole()),
+                        user.getId()
                 ))
-                .orElseThrow(()-> new UsernameNotFoundException("Failed to retrieve user: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
 }

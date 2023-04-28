@@ -7,7 +7,7 @@ import org.example.service.database.entity.OrderType;
 import java.time.LocalDateTime;
 
 @Value
-public class OrderCreateEditDto {
+public class OrderCreateDto {
 
     Long userId;
     Long bookId;

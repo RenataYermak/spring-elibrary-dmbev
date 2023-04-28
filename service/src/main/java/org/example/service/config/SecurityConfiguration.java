@@ -30,11 +30,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
-                        .antMatchers("/login", "/users/registration", "/books", "/users", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers(HttpMethod.POST, "/users/**").hasAuthority(ADMIN.getAuthority())
                         .antMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN.getAuthority())
-                        .anyRequest().authenticated()
+                        .antMatchers("/orders", "/users/registration", "/books", "/users/{\\d+}/update", "/users", "/orders/{id}/delete", "/orders/{id}/update", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
+                        .antMatchers(HttpMethod.POST, "/users").authenticated()
+                        .antMatchers("/login").permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
 
-            Set<Method> userDetailsMethods = Set.of(UserDetails.class.getMethods());
+            Set<Method> userDetailsMethods = Set.of(userDetails.getClass().getMethods());
 
             return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
                     new Class[]{UserDetails.class, OidcUser.class},
