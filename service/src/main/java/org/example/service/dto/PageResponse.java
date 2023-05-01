@@ -21,5 +21,9 @@ public class PageResponse<T> {
         int page;
         int size;
         long totalElements;
+
+        public int getTotalPages() {
+            return (int) Math.ceil((double) totalElements / size);
+        }
     }
 }

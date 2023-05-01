@@ -1,0 +1,8 @@
+<div th:fragment="locale">
+    <form action="">
+        <select name="lang" onchange="this.form.submit()" style="border-color: royalblue; border-width: 2px;border-radius: 5px">
+            <option th:selected="${#locale.language == 'en'}" value="en">EN</option>
+            <option th:selected="${#locale.language == 'ru'}" value="ru">RU</option>
+        </select>
+    </form>
+</div>

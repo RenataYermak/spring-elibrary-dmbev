@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public record BookFilter(Integer publishYear,
                          String category,
-                         String author) {
+                         String author,
+                         String title) {
 }

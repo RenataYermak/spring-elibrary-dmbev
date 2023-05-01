@@ -23,9 +23,8 @@ public class OrderFilterRepositoryImpl implements OrderFilterRepository {
         var predicate = QPredicates.builder()
                 .add(filter.type(), order.type::eq)
                 .add(filter.status(), order.status::eq)
-                .add(filter.user(), order.user.email::eq)
-                .add(filter.book(), order.book.title::eq)
-                .add(filter.orderedDate(), order.orderedDate::eq)
+                .add(filter.user(), order.user.email::containsIgnoreCase)
+                .add(filter.book(), order.book.title::containsIgnoreCase)
                 .build();
 
         return new JPAQuery<Order>(entityManager)

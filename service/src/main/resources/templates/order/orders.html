@@ -12,34 +12,138 @@
     <header th:insert="include/header::header"></header>
 </div>
 <div class="container mt-0">
-    <h1><span>Orders</span></h1>
+    <h3><span>All Orders</span></h3>
+    <br>
+    <form action="/orders">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
+               type="text" name="type" th:placeholder="#{orders.label.type}" th:value="${filter.type()}">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
+               type="text" name="status" th:placeholder="#{orders.label.status}"
+               th:value="${filter.status()}">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
+               type="text" name="user" th:placeholder="#{orders.label.email}" th:value="${filter.user()}">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
+               type="text" name="book" th:placeholder="#{orders.label.title}"
+               th:value="${filter.book()}">
+        <button class="btn btn-secondary" style="margin-left: 20px; width: 70px; background-color: royalblue"
+                type="submit">Filter</button>
+    </form>
+    <br>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col"><span>Title</span></th>
-            <th scope="col"><span>Email</span></th>
-            <th scope="col"><span>Status</span></th>
-            <th scope="col"><span>Type</span></th>
-            <th scope="col"><span>Ordered Date</span></th>
-            <th scope="col"><span>ReturnedDate</span></th>
-            <th scope="col"><span>Action</span></th>
+            <th scope="col"><h5 th:text="#{orders.label.title}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.email}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.status}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.type}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.ordered_date}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.reserved_date}"></h5></th>
+            <th scope="col"><h5 th:text="#{orders.label.action}"></h5></th>
         </tr>
         </thead>
         <tbody>
-        <div th:each="order : ${orders.content}">
+        <div th:each="order : ${orders.content}" th:if="${#authentication.principal.id == order.getUser().id}">
             <tr>
-                <th scope="row"><h4 th:text="${order.getBook().title}"/></th>
-                <td><h4 th:text="${order.getUser().email}"/></td>
-                <td><h4 th:text="${order.status}"/></td>
-                <td><h4 th:text="${order.type}"/></td>
-                <td><h4 th:text="${order.ordered_date}"/></td>
-                <td><h4 th:text="${order.returned_date}"/></td>
-                <td><a th:href="'/orders/' + ${order.id + '/update'}"
-                       class="btn btn-secondary"><span>Edit</span></a></td>
+                <th scope="row"><h6 th:text="${order.getBook().title}"/></th>
+                <td><h6 th:text="${order.getUser().email}"/></td>
+                <td><h6 th:text="${order.status.toString().toLowerCase()}"/></td>
+                <td><h6 th:text="${order.type.toString().toLowerCase().replace('_', ' ')}"/></td>
+                <td>
+                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                        <span th:text="${myParseDate}"></span>
+                    </div>
+                </td>
+                <td>
+                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                        <span th:text="${myParseDate}"></span>
+                    </div>
+                <td>
+                    <form method="post" th:if="${order.status.name() == 'RETURNED'}">
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/update(orderId=${order.id})}" class="btn btn-success"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.return}"></span>
+                            </a>
+                        </div>
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/delete(orderId=${order.id})}" class="btn btn-danger"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.delete}"></span>
+                            </a>
+                        </div>
+                    </form>
+                    <form method="post" th:if="${order.status.name() == 'ORDERED'}">
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/update(orderId=${order.id})}" class="btn btn-success"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.return}"></span>
+                            </a>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </div>
+        <div th:each="order : ${orders.content}" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
+            <tr>
+                <th scope="row"><h6 th:text="${order.getBook().title}"/></th>
+                <td><h6 th:text="${order.getUser().email}"/></td>
+                <td><h6 th:text="${order.status.toString().toLowerCase()}"/></td>
+                <td><h6 th:text="${order.type.toString().toLowerCase().replace('_', ' ')}"/></td>
+                <td>
+                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                        <span th:text="${myParseDate}"></span>
+                    </div>
+                </td>
+                <td>
+                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                        <span th:text="${myParseDate}"></span>
+                    </div>
+                <td>
+                    <form method="post" th:if="${order.status.name() == 'RETURNED'}">
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/update(orderId=${order.id})}" class="btn btn-success"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.return}"></span>
+                            </a>
+                        </div>
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/delete(orderId=${order.id})}" class="btn btn-danger"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.delete}"></span>
+                            </a>
+                        </div>
+                    </form>
+                    <form method="post" th:if="${order.status.name() == 'ORDERED'}">
+                        <div style="display: inline-block;">
+                            <a th:href="@{/orders/{orderId}/update(orderId=${order.id})}" class="btn btn-success"
+                               style="display: inline-block;" type="submit">
+                                <span th:text="#{orders.button.return}"></span>
+                            </a>
+                        </div>
+                    </form>
+                </td>
             </tr>
         </div>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-left">
+            <li class="page-item">
+                <a class="page-link" style="color: royalblue" th:href="@{/orders(page=0, size=${orders.metadata.size})}"
+                   th:if="${orders.metadata.page > 0}">Previous</a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, orders.metadata.totalPages - 1)}">
+                <a class="page-link" style="color: royalblue"
+                   th:href="@{/orders(page=${pageNumber}, size=${orders.metadata.size})}"
+                   th:text="${pageNumber + 1}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" style="color: royalblue"
+                   th:href="@{/orders(page=${orders.metadata.page + 1}, size=${orders.metadata.size})}"
+                   th:if="${orders.metadata.page < orders.metadata.totalPages - 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <div th:if="${errors}">
     <p style="color:red" th:each="error:${erroes}" th:text="${error.defaultMessage}"> Error message</p>

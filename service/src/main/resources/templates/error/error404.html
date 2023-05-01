@@ -10,12 +10,12 @@
 <body>
 <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="text-center">
-        <h1 class="display-1 fw-bold">404</h1>
-        <p class="fs-3"><span class="text-danger">Opps!</span> Page not found.</p>
+        <h1 class="display-1 fw-bold"><span th:text="#{error404.page}"></span></h1>
+        <p class="fs-3"><span class="text-danger" th:text="#{error.message.opps}"></span><span th:text="#{error404.message.not_found}"></span></p>
         <p class="lead">
-            The page you’re looking for doesn’t exist.
+            <span th:text="#{error404.message}"></span>
         </p>
-        <a href="/users" class="btn btn-primary">Go Home</a>
+        <a href="/books" class="btn btn-primary"><span th:text="#{error.go_home}"></span></a>
     </div>
 </div>
 </body>

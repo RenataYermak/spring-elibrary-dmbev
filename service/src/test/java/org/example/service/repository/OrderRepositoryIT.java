@@ -6,7 +6,6 @@ import org.example.service.database.entity.OrderType;
 import org.example.service.database.repository.OrderRepository;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.integration.IntegrationTestBase;
-import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;

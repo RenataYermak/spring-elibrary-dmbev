@@ -5,7 +5,6 @@ import org.example.service.database.entity.Role;
 import org.example.service.database.repository.UserRepository;
 import org.example.service.dto.userDto.UserFilter;
 import org.example.service.integration.IntegrationTestBase;
-import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;

@@ -9,6 +9,7 @@ import org.example.service.dto.userDto.UserCreateEditDto;
 import org.example.service.dto.userDto.UserFilter;
 import org.example.service.service.UserService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,7 @@ public class UserController {
     @GetMapping
     public String findAll(Model model,
                           UserFilter filter,
-                          Pageable pageable) {
+                          @PageableDefault Pageable pageable) {
         var page = userService.findAll(filter, pageable);
         model.addAttribute("users", PageResponse.of(page));
         model.addAttribute("filter", filter);

@@ -12,52 +12,58 @@
     <header th:insert="include/header::header"></header>
 </div>
 <div class="container">
+    <h3><span th:text="#{page.title.users}"></span></h3>
+    <br>
     <form action="/users">
-        <label for="firstname">Firstname:
-            <input id="firstname" type="text" name="firstname" th:value="${filter.firstname()}">
-        </label><br>
-        <label for="lastname">Lastname:
-            <input id="lastname" type="text" name="lastname" th:value="${filter.lastname()}">
-        </label><br>
-        <label for="email">Email:
-            <input id="email" type="text" name="email" th:value="${filter.email()}">
-        </label><br>
-        <div>
-            <label for="page">Page:
-                <input id="page" type="number" name="page" th:value="${users.metadata.page}">
-            </label>
-            <label for="size">Size:
-                <input id="size" type="number" name="size" th:value="${users.metadata.size}">
-            </label>
-        </div>
-        <button type="submit">Filter</button>
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="firstname" th:placeholder="#{users.table.label.first_name}" th:value="${filter.firstname()}">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="lastname" th:placeholder="#{users.table.label.second_name}" th:value="${filter.lastname()}">
+        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="email" th:placeholder="#{users.table.label.email}" th:value="${filter.email()}">
+        <button class="btn btn-secondary" style="margin-left: 20px; width: 70px; background-color: royalblue" type="submit">Filter</button>
     </form>
 </div>
+<br>
 <div class="container mt-0">
-    <h1><span>Users</span></h1>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col"><span>First Name</span></th>
-            <th scope="col"><span>Last Name</span></th>
-            <th scope="col"><span>Email</span></th>
-            <th scope="col"><span>Role</span></th>
-            <th scope="col"><span>Action</span></th>
+            <th scope="col"><h5 th:text="#{users.table.label.first_name}"></h5></th>
+            <th scope="col"><h5 th:text="#{users.table.label.second_name}"></h5></th>
+            <th scope="col"><h5 th:text="#{users.table.label.email}"></h5></th>
+            <th scope="col"><h5 th:text="#{users.table.label.role}"></h5></th>
+            <th scope="col"><h5 th:text="#{users.table.label.action}"></h5></th>
         </tr>
         </thead>
         <tbody>
         <div th:each="user : ${users.content}">
             <tr>
-                <th scope="row"><h4 th:text="${user.firstname}"/></th>
-                <td><h4 th:text="${user.lastname}"/></td>
-                <td><h4 th:text="${user.email}"/></td>
-                <td><h4 th:text="${user.role}"/></td>
-                <td><a th:href="@{/users/{userId}/update(userId=${user.id})}"
-                       class="btn btn-secondary"><span>Edit</span></a></td>
+                <th scope="row"><h5 th:text="${user.firstname}"/></th>
+                <td><h5 th:text="${user.lastname}"/></td>
+                <td><h5 th:text="${user.email}"/></td>
+                <td><h5 th:text="${user.role.toString().toLowerCase()}"/></td>
+                <td><a style="width: 100%" th:href="@{/users/{userId}/update(userId=${user.id})}"
+                       class="btn btn-success"><span th:text="#{users.button.edit}"></span></a></td>
             </tr>
         </div>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-left">
+            <li class="page-item">
+                <a class="page-link" style="color: royalblue" th:href="@{/users(page=0, size=${users.metadata.size})}"
+                   th:if="${users.metadata.page > 0}">Previous</a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, users.metadata.totalPages - 1)}">
+                <a class="page-link" style="color: royalblue"
+                   th:href="@{/users(page=${pageNumber}, size=${users.metadata.size})}"
+                   th:text="${pageNumber + 1}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" style="color: royalblue"
+                   th:href="@{/users(page=${users.metadata.page + 1}, size=${users.metadata.size})}"
+                   th:if="${users.metadata.page < users.metadata.totalPages - 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <div th:if="${errors}">
     <p style="color:red" th:each="error:${erroes}" th:text="${error.defaultMessage}"> Error message</p>

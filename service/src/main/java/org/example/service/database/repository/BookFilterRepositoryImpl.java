@@ -22,8 +22,9 @@ public class BookFilterRepositoryImpl implements BookFilterRepository {
     public List<Book> findAllByFilter(BookFilter filter) {
         var predicate = QPredicates.builder()
                 .add(filter.publishYear(), book.publishYear::eq)
-                .add(filter.category(), book.category.name::eq)
-                .add(filter.author(), book.author.name::eq)
+                .add(filter.category(), book.category.name::containsIgnoreCase)
+                .add(filter.author(), book.author.name::containsIgnoreCase)
+                .add(filter.title(), book.title::containsIgnoreCase)
                 .build();
 
         return new JPAQuery<Book>(entityManager)

@@ -6,21 +6,29 @@
                 </h1>
             </a>
         </div>
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <div th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
-                <li><a href="/users" class="nav-link px-2 link-dark"><span>My Profile</span></a></li>
-                <li><a href="/orders" class="nav-link px-2 link-dark"><span>My Orders</span></a></li>
-            </div>
-            <div th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
-                <li><a href="/users" class="nav-link px-2 link-dark"><span>Users</span></a></li>
-                <li><a href="/books/add" class="nav-link px-2 link-dark"><span>Add Book</span></a></li>
-                <li><a href="/orders" class="nav-link px-2 link-dark"><span>Orders</span></a></li>
-            </div>
-            <li><a href="/books" class="nav-link px-2 link-dark"><span>Books</span></a></li>
+<!--        "@{/orders/{userId}(userId=${#authentication.principal.id})}" -->
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="margin-left: 50px">
+            <li><a th:href="@{/users/{userId}/update(userId=${#authentication.principal.id})}" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
+                   class="nav-link px-2 link-dark"><span th:text="#{page.title.my_profile}"></span></a></li>
+            <li><a href="/orders" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
+                   class="nav-link px-2 link-dark"><span th:text="#{page.title.my_orders}"></span></a></li>
+            <li><a href="/users" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}"
+                   class="nav-link px-2 link-dark"><span th:text="#{page.title.users}"></span></a></li>
+            <li><a href="/books/add" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}"
+                   class="nav-link px-2 link-dark"><span th:text="#{page.title.add_book}"></span></a></li>
+            <li><a href="/orders" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}"
+                   class="nav-link px-2 link-dark"><span th:text="#{page.title.orders}"></span></a></li>
+            <li><a href="/books" class="nav-link px-2 link-dark"><span th:text="#{page.title.books}"></span></a>
+            </li>
+            <li><a href="/about" class="nav-link px-2 link-dark"><span th:text="#{page.title.about_library}"></span></a>
+            </li>
         </ul>
-        <div class="col-md-3 text-end">
+        <div style="display: inline-block;margin-left: 60px" >
+            <header th:insert="include/locale :: locale"></header>
+        </div>
+        <div  style="display: inline-block;">
             <form th:action="@{/logout}" method="post">
-                <button type="submit" class="btn btn-primary"><span>Logout</span></button>
+                <button type="submit" class="btn btn-primary" style="display: inline-block;background-color: royalblue"><span th:text="#{header.log_out}"></span></button>
             </form>
         </div>
     </header>
