@@ -126,15 +126,15 @@
         </div>
         </tbody>
     </table>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" th:if="${!orders.content.isEmpty()}">
         <ul class="pagination justify-content-left">
             <li class="page-item">
-                <a class="page-link" style="color: royalblue" th:href="@{/orders(page=0, size=${orders.metadata.size})}"
+                <a class="page-link" style="color: royalblue" th:href="@{/orders(page=${orders.metadata.page - 1}, size=${orders.metadata.size})}"
                    th:if="${orders.metadata.page > 0}">Previous</a>
             </li>
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, orders.metadata.totalPages - 1)}">
                 <a class="page-link" style="color: royalblue"
-                   th:href="@{/orders(page=${pageNumber}, size=${orders.metadata.size})}"
+                   th:attr="href=@{/orders(page=${pageNumber}, size=${orders.metadata.size})}"
                    th:text="${pageNumber + 1}"></a>
             </li>
             <li class="page-item">

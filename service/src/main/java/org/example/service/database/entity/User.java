@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@EqualsAndHashCode(of = "login")
+@EqualsAndHashCode(of = "email")
 @ToString(exclude = "orders")
 @NoArgsConstructor
 @Data

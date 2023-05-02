@@ -17,8 +17,10 @@
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" th:placeholder="#{register.label.first_name}"
                    class="form-control"><br>
-            <input type="text" th:value="*{lastname}" name="lastname"th:placeholder="#{register.label.second_name}" class="form-control"><br>
-            <input type="text" th:value="*{email}" name="email" th:placeholder="#{register.label.email}" class="form-control"><br>
+            <input type="text" th:value="*{lastname}" name="lastname" th:placeholder="#{register.label.second_name}"
+                   class="form-control"><br>
+            <input type="text" th:value="*{email}" name="email" th:placeholder="#{register.label.email}"
+                   class="form-control"><br>
             <input type="password" name="rawPassword" th:placeholder="#{register.label.password}"
                    class="form-control"><br>
             <div th:each="role : ${roles}">

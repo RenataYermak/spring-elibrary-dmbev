@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 
 @ControllerAdvice
-public class ControllerConfig {
+public class ControllerConfiguration {
 
     @InitBinder
     void initBinder(WebDataBinder binder) {

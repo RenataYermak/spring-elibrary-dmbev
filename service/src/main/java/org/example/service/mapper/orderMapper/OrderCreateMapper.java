@@ -35,24 +35,21 @@ public class OrderCreateMapper implements Mapper<OrderCreateDto, Order> {
     }
 
     private void copy(OrderCreateDto object, Order order) {
-        order.setUser(getUser(object.getUserId()));
-        order.setBook(getBook(object.getBookId()));
+        order.setUser(getUser(object.getUserId()).get());
+        order.setBook(getBook(object.getBookId()).get());
         order.setStatus(OrderStatus.ORDERED);
         order.setType(object.getType());
         order.setOrderedDate(LocalDateTime.now());
         order.setReturnedDate(object.getReturnedDate());
     }
 
-    public Book getBook(Long bookId) {
+    public Optional<Book> getBook(Long bookId) {
         return Optional.ofNullable(bookId)
-                .flatMap(bookRepository::findById)
-                .orElse(null);
+                .flatMap(bookRepository::findById);
     }
 
-    public User getUser(Long userId) {
+    public Optional<User> getUser(Long userId) {
         return Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElse(null);
+                .flatMap(userRepository::findById);
     }
-
 }

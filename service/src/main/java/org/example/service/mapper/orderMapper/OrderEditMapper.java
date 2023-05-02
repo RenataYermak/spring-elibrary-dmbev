@@ -35,24 +35,21 @@ public class OrderEditMapper implements Mapper<OrderCreateDto, Order> {
     }
 
     private void copy(OrderCreateDto object, Order order) {
-        order.setUser(getUser(order.getUser().getId()));
-        order.setBook(getBook(order.getBook().getId()));
+        order.setUser(getUser(order.getUser().getId()).get());
+        order.setBook(getBook(order.getBook().getId()).get());
         order.setStatus(OrderStatus.RETURNED);
         order.setType(order.getType());
         order.setOrderedDate(order.getOrderedDate());
         order.setReturnedDate(LocalDateTime.now());
     }
 
-    public Book getBook(Long bookId) {
+    public Optional<Book> getBook(Long bookId) {
         return Optional.ofNullable(bookId)
-                .flatMap(bookRepository::findById)
-                .orElse(null);
+                .flatMap(bookRepository::findById);
     }
 
-    public User getUser(Long userId) {
+    public Optional<User> getUser(Long userId) {
         return Optional.ofNullable(userId)
-                .flatMap(userRepository::findById)
-                .orElse(null);
+                .flatMap(userRepository::findById);
     }
-
 }

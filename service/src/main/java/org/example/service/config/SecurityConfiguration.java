@@ -30,10 +30,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
-                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers("/orders", "/users/registration", "/books", "/users/{\\d+}/update", "/users", "/orders/{id}/delete", "/orders/{id}/update", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
-                        .antMatchers(HttpMethod.POST, "/users").authenticated()
+                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete","/users/registration").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/books/**","/users").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers("/orders", "/books", "/users/{\\d+}/update", "/orders/{id}/delete", "/orders/{id}/update", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
                         .antMatchers("/login").permitAll()
                 )
                 .logout(logout -> logout

@@ -63,15 +63,15 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" th:if="${!books.content.isEmpty()}">
         <ul class="pagination justify-content-left">
             <li class="page-item">
-                <a class="page-link" style="color: royalblue" th:href="@{/books(page=0, size=${books.metadata.size})}"
+                <a class="page-link" style="color: royalblue" th:href="@{/books(page=${books.metadata.page - 1}, size=${books.metadata.size})}"
                    th:if="${books.metadata.page > 0}">Previous</a>
             </li>
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, books.metadata.totalPages - 1)}">
                 <a class="page-link" style="color: royalblue"
-                   th:href="@{/books(page=${pageNumber}, size=${books.metadata.size})}"
+                   th:attr="href=@{/books(page=${pageNumber}, size=${books.metadata.size})}"
                    th:text="${pageNumber + 1}"></a>
             </li>
             <li class="page-item">
