@@ -71,7 +71,7 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-    @RequestMapping("/{id}/update")
+    @PostMapping(value = "/{id}/update")
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute OrderCreateDto order) {
         return orderService.update(id, order)
@@ -79,7 +79,7 @@ public class OrderController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @RequestMapping("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long orderId) {
         if (!orderService.delete(orderId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

@@ -37,7 +37,6 @@ public class UserService implements UserDetailsService {
     private final UserCreateEditMapper userCreateEditMapper;
     private final EmailService emailService;
 
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
         var predicate = QPredicates.builder()
@@ -64,6 +63,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
         UserReadDto userReadDto = Optional.of(userDto)
                 .map(userCreateEditMapper::map)

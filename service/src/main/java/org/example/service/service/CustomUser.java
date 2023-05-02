@@ -10,6 +10,7 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Value
 public class CustomUser extends User {
+
     Long id;
 
     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities, Long id) {

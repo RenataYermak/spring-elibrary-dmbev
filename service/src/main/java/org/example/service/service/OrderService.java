@@ -33,12 +33,12 @@ public class OrderService {
     private final OrderEditMapper orderEditMapper;
 
     public Page<OrderReadDto> findAll(OrderFilter filter, Pageable pageable) {
-            var predicate = QPredicates.builder()
-                    .add(filter.type(), order.type::eq)
-                    .add(filter.status(), order.status::eq)
-                    .add(filter.user(), order.user.email::containsIgnoreCase)
-                    .add(filter.book(), order.book.title::containsIgnoreCase)
-                    .build();
+        var predicate = QPredicates.builder()
+                .add(filter.type(), order.type::eq)
+                .add(filter.status(), order.status::eq)
+                .add(filter.user(), order.user.email::containsIgnoreCase)
+                .add(filter.book(), order.book.title::containsIgnoreCase)
+                .build();
 
         return orderRepository.findAll(predicate, pageable)
                 .map(orderReadMapper::map);
@@ -71,10 +71,11 @@ public class OrderService {
                 .orElseThrow();
 
         Optional<Book> book = bookRepository.findById(orderDto.getBookId());
-        book.ifPresent(value -> {
-            value.setNumber(value.getNumber() - 1);
-            bookRepository.save(value);
-        });
+
+        if (book.isPresent() && book.get().getNumber() > 0) {
+            book.get().setNumber(book.get().getNumber() - 1);
+            bookRepository.save(book.get());
+        }
         return orderReadDto;
     }
 
@@ -98,20 +99,12 @@ public class OrderService {
 
     @Transactional
     public boolean delete(Long id) {
-        Boolean result = orderRepository.findById(id)
+        return orderRepository.findById(id)
                 .map(entity -> {
                     orderRepository.delete(entity);
                     orderRepository.flush();
                     return true;
                 })
                 .orElse(false);
-
-//        Optional<Order> order = orderRepository.findById(id);
-//        if (order.isPresent() && order.get().getStatus()== OrderStatus.RETURNED) {
-//            Book book = order.get().getBook();
-//            book.setNumber(book.getNumber() + 1);
-//            bookRepository.save(book);
-//        }
-        return result;
     }
 }
