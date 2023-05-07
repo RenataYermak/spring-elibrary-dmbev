@@ -65,19 +65,23 @@ public class UserService implements UserDetailsService {
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
-        UserReadDto userReadDto = Optional.of(userDto)
-                .map(userCreateEditMapper::map)
-                .map(userRepository::save)
-                .map(userReadMapper::map)
-                .orElseThrow();
+        if(userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
+            UserReadDto userReadDto = Optional.of(userDto)
+                    .map(userCreateEditMapper::map)
+                    .map(userRepository::save)
+                    .map(userReadMapper::map)
+                    .orElseThrow();
 
-        if (!isEmpty(userDto.getEmail())) {
-            String messageFromBundle = getBundle("messages", Locale.getDefault()).getString("email.message.registration");
-            String subjectFromBundle = getBundle("messages", Locale.getDefault()).getString("email.subject.registration");
-            String message = MessageFormat.format(messageFromBundle, userDto.getFirstname(), userDto.getEmail(), userDto.getRawPassword());
-            emailService.sendMessage(userDto.getEmail(), subjectFromBundle, message);
+            if (!isEmpty(userDto.getEmail())) {
+                String messageFromBundle = getBundle("messages", Locale.getDefault()).getString("email.message.registration");
+                String subjectFromBundle = getBundle("messages", Locale.getDefault()).getString("email.subject.registration");
+                String message = MessageFormat.format(messageFromBundle, userDto.getFirstname(), userDto.getEmail(), userDto.getRawPassword());
+                emailService.sendMessage(userDto.getEmail(), subjectFromBundle, message);
+            }
+            return userReadDto;
+        } else {
+            throw new IllegalArgumentException("User with email " + userDto.getEmail()  + " already exists.");
         }
-        return userReadDto;
     }
 
     @Transactional
@@ -103,11 +107,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(user -> new CustomUser(
+                .map(user -> new CustomUserDetails(
+                        user.getId(),
                         user.getEmail(),
                         user.getPassword(),
-                        Collections.singleton(user.getRole()),
-                        user.getId()
+                        Collections.singleton(user.getRole())
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }

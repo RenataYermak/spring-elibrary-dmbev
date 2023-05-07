@@ -14,6 +14,9 @@
     <h3><span th:text="#{register.registration}"></span></h3>
     <br>
     <form th:action="@{/users}" method="post">
+        <div style="color: red" th:if="${param.error}">
+            <span th:text="#{sign_in.info.invalid.data}"></span>
+        </div>
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" th:placeholder="#{register.label.first_name}"
                    class="form-control"><br>
@@ -23,16 +26,17 @@
                    class="form-control"><br>
             <input type="password" name="rawPassword" th:placeholder="#{register.label.password}"
                    class="form-control"><br>
-            <div th:each="role : ${roles}">
+            <div th:each="role : ${roles}" style="display: inline-block">
                 <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
                 <label th:for="${role}" th:text="${role}"><span th:text="#{register.label.role}"></span></label>
             </div>
+            <br>
             <br>
             <button type="submit" class="btn btn-success"><span th:text="#{register.button.register_user}"></span></button>
         </div>
     </form>
 </div>
-<div th:if="${errors}">
+<div class="container" th:if="${errors}">
     <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>
 </div>
 <div class="container">

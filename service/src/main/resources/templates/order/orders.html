@@ -15,18 +15,25 @@
     <h3><span>All Orders</span></h3>
     <br>
     <form action="/orders">
-        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
-               type="text" name="type" th:placeholder="#{orders.label.type}" th:value="${filter.type()}">
-        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
-               type="text" name="status" th:placeholder="#{orders.label.status}"
-               th:value="${filter.status()}">
+        <select class="custom-select form-control" name="type" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px">
+            <option value="READING_ROOM" selected="selected"><span
+                    th:text="#{orders.label.reading_room}"></span></option>
+            <option value="SEASON_TICKET"><span
+                    th:text="#{orders.label.season_ticket}"></span></option>
+        </select>
+        <select class="custom-select form-control" name="status" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px">
+            <option value="ORDERED" selected="selected"><span
+                    th:text="#{orders.type.ordered}"></span></option>
+            <option value="RETURNED"><span
+                    th:text="#{orders.type.returned}"></span></option>
+        </select>
         <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
                type="text" name="user" th:placeholder="#{orders.label.email}" th:value="${filter.user()}">
         <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
                type="text" name="book" th:placeholder="#{orders.label.title}"
                th:value="${filter.book()}">
-        <button class="btn btn-secondary" style="margin-left: 20px; width: 70px; background-color: royalblue"
-                type="submit">Filter</button>
+        <button class="btn btn-secondary" style="margin-left: 20px; width: 90px; background-color: royalblue"
+                type="submit"><span th:text="#{label.filter}"></span></button>
     </form>
     <br>
     <table class="table table-striped">
@@ -54,7 +61,7 @@
                     </div>
                 </td>
                 <td>
-                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                    <div th:with="myParseDate=${#temporals.format(order.returned_date, 'dd-MM-yyyy HH:mm')}">
                         <span th:text="${myParseDate}"></span>
                     </div>
                 <td>
@@ -95,7 +102,7 @@
                     </div>
                 </td>
                 <td>
-                    <div th:with="myParseDate=${#temporals.format(order.ordered_date, 'dd-MM-yyyy HH:mm')}">
+                    <div th:with="myParseDate=${#temporals.format(order.returned_date, 'dd-MM-yyyy HH:mm')}">
                         <span th:text="${myParseDate}"></span>
                     </div>
                 <td>
@@ -145,8 +152,8 @@
         </ul>
     </nav>
 </div>
-<div th:if="${errors}">
-    <p style="color:red" th:each="error:${erroes}" th:text="${error.defaultMessage}"> Error message</p>
+<div class="container" th:if="${errors}">
+    <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>
 </div>
 <div class="container">
     <div th:insert="include/footer :: footer"></div>

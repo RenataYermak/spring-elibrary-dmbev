@@ -20,7 +20,7 @@
                    class="form-control"><br>
             <input type="text" th:value="*{lastname}" name="lastname" th:placeholder="#{user.label.second_name}" class="form-control"><br>
             <input type="text" th:value="*{email}" name="email" th:placeholder="#{user.label.email}" class="form-control"><br>
-            <div th:each="role : ${roles}">
+            <div th:each="role : ${roles}" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
                 <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
                 <label th:for="${role}" th:text="${role}"><span th:text="#{register.label.role}"></span></label>
             </div>
@@ -34,6 +34,9 @@
             <button class="btn btn-danger" type="submit"><span th:text="#{users.button.delete}"></span></button>
         </form>
     </div>
+</div>
+<div class="container" th:if="${errors}">
+    <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>
 </div>
 <div class="container" style="padding-top: 60px">
     <div th:insert="include/footer :: footer"></div>

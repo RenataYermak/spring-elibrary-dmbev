@@ -22,13 +22,15 @@
                type="text" name="author" th:placeholder="#{book.label.author}"
                th:value="${filter.author()}">
         <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px"
-               type="text" name="publishYear" th:placeholder="#{book.label.publish_year}" th:value="${filter.publishYear()}">
-        <button class="btn btn-secondary" style="margin-left: 20px; width: 70px; background-color: royalblue"
-                type="submit">Filter
+               type="text" name="publishYear" th:placeholder="#{book.label.publish_year}"
+               th:value="${filter.publishYear()}">
+        <button class="btn btn-secondary" style="margin-left: 20px; width: 90px; background-color: royalblue"
+                type="submit"><span th:text="#{label.filter}"></span>
         </button>
     </form>
 </div>
-<main>
+<br>
+<div>
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
@@ -37,13 +39,14 @@
                         <div class="card shadow-sm">
                             <div th:if="${book.picture}">
                                 <img th:src="@{/api/v1/books/{bookId}/picture(bookId=${book.id})}"
-                                     class="bd-placeholder-img card-img-top" width="100%" height="300" alt="Book image">
+                                     class="bd-placeholder-img card-img-top" width="100%" height="350" alt="Book image">
                             </div>
                             <div class="card-body">
                                 <p class="card-text"><h6 th:text="${book.title}"/></p>
-                                <p class="card-text"><h6 th:text="${book.author.name}"/></p>
-                                <h7 th:text=" ${book.publishYear}"/>
-
+                                <span class="card-text" style="display: inline-block" th:text="${book.author.name}"/>
+                                <span class="card-text" style="display: inline-block" th:text=" ${book.publishYear}"/>
+                                <br>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group" style="width: 100%">
                                         <a th:href="@{/books/{bookId}(bookId=${book.id})}"
@@ -63,25 +66,29 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example" th:if="${!books.content.isEmpty()}">
-        <ul class="pagination justify-content-left">
-            <li class="page-item">
-                <a class="page-link" style="color: royalblue" th:href="@{/books(page=${books.metadata.page - 1}, size=${books.metadata.size})}"
-                   th:if="${books.metadata.page > 0}">Previous</a>
-            </li>
-            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, books.metadata.totalPages - 1)}">
-                <a class="page-link" style="color: royalblue"
-                   th:attr="href=@{/books(page=${pageNumber}, size=${books.metadata.size})}"
-                   th:text="${pageNumber + 1}"></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" style="color: royalblue"
-                   th:href="@{/books(page=${books.metadata.page + 1}, size=${books.metadata.size})}"
-                   th:if="${books.metadata.page < books.metadata.totalPages - 1}">Next</a>
-            </li>
-        </ul>
-    </nav>
-</main>
+    <br>
+    <div class="container">
+        <nav aria-label="Page navigation example" th:if="${!books.content.isEmpty()}">
+            <ul class="pagination justify-content-left">
+                <li class="page-item">
+                    <a class="page-link" style="color: royalblue"
+                       th:href="@{/books(page=${books.metadata.page - 1}, size=${books.metadata.size})}"
+                       th:if="${books.metadata.page > 0}">Previous</a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, books.metadata.totalPages - 1)}">
+                    <a class="page-link" style="color: royalblue"
+                       th:attr="href=@{/books(page=${pageNumber}, size=${books.metadata.size})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" style="color: royalblue"
+                       th:href="@{/books(page=${books.metadata.page + 1}, size=${books.metadata.size})}"
+                       th:if="${books.metadata.page < books.metadata.totalPages - 1}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 <div class="container">
     <div th:insert="include/footer :: footer"></div>
 </div>

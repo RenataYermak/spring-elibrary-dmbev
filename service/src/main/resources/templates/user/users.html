@@ -14,15 +14,15 @@
 <div class="container">
     <h3><span th:text="#{page.title.users}"></span></h3>
     <br>
-    <form action="/users">
-        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="firstname" th:placeholder="#{users.table.label.first_name}" th:value="${filter.firstname()}">
-        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="lastname" th:placeholder="#{users.table.label.second_name}" th:value="${filter.lastname()}">
-        <input class="form-control" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="email" th:placeholder="#{users.table.label.email}" th:value="${filter.email()}">
-        <button class="btn btn-secondary" style="margin-left: 20px; width: 70px; background-color: royalblue;display: inline-block" type="submit">Filter</button>
+    <form action="/users" style="display: inline-block;">
+        <input class="form-control" style="width: 20%;  display: inline-block; border-color: #282727; border-width: 1px" type="text" name="firstname" th:placeholder="#{users.table.label.first_name}" th:value="${filter.firstname()}">
+        <input class="form-control" style="width: 20%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="lastname" th:placeholder="#{users.table.label.second_name}" th:value="${filter.lastname()}">
+        <input class="form-control" style="width: 20%; display: inline-block; border-color: #282727; border-width: 1px" type="text" name="email" th:placeholder="#{users.table.label.email}" th:value="${filter.email()}">
+        <button class="btn btn-secondary" style="margin-left: 20px; width: 90px; background-color: royalblue;display: inline-block" type="submit"><span th:text="#{label.filter}"></span></button>
     </form>
-    <div style="display: inline-block">
+    <div style="display: inline-block;">
         <a href="/users/registration"
-           class="btn btn-sm btn-outline-secondary"><span th:text="#{register.registration}"></span></a>
+           class="btn btn-secondary" style="background-color: royalblue;display: inline-block;margin-left: 250px"><span th:text="#{register.registration}"></span></a>
     </div>
 </div>
 <br>
@@ -68,24 +68,6 @@
             </li>
         </ul>
     </nav>
-<!--    <nav aria-label="Page navigation example">-->
-<!--        <ul class="pagination justify-content-left">-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link" style="color: royalblue" th:href="@{/users(page=0, size=${users.metadata.size})}"-->
-<!--                   th:if="${users.metadata.page > 0}">Previous</a>-->
-<!--            </li>-->
-<!--            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, users.metadata.totalPages - 1)}">-->
-<!--                <a class="page-link" style="color: royalblue"-->
-<!--                   th:href="@{/users(page=${pageNumber}, size=${users.metadata.size})}"-->
-<!--                   th:text="${pageNumber + 1}"></a>-->
-<!--            </li>-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link" style="color: royalblue"-->
-<!--                   th:href="@{/users(page=${users.metadata.page + 1}, size=${users.metadata.size})}"-->
-<!--                   th:if="${users.metadata.page < users.metadata.totalPages - 1}">Next</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
 </div>
 <div th:if="${errors}">
     <p style="color:red" th:each="error:${erroes}" th:text="${error.defaultMessage}"> Error message</p>

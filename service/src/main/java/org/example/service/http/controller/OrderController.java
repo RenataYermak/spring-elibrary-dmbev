@@ -2,7 +2,7 @@ package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.dto.PageResponse;
-import org.example.service.dto.orderDto.OrderCreateDto;
+import org.example.service.dto.orderDto.OrderCreateEditDto;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.service.OrderService;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,7 +60,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute OrderCreateDto order,
+    public String create(@ModelAttribute @Validated OrderCreateEditDto order,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -71,15 +72,15 @@ public class OrderController {
         return "redirect:/orders";
     }
 
-    @PostMapping(value = "/{id}/update")
+    @GetMapping( "/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute OrderCreateDto order) {
-        return orderService.update(id, order)
+                         @ModelAttribute OrderCreateEditDto order) {
+        return orderService.returnBook(id, order)
                 .map(it -> "redirect:/orders")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long orderId) {
         if (!orderService.delete(orderId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

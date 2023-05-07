@@ -7,7 +7,7 @@ import org.example.service.database.entity.OrderStatus;
 import org.example.service.database.entity.User;
 import org.example.service.database.repository.BookRepository;
 import org.example.service.database.repository.UserRepository;
-import org.example.service.dto.orderDto.OrderCreateDto;
+import org.example.service.dto.orderDto.OrderCreateEditDto;
 import org.example.service.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -16,25 +16,25 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class OrderCreateMapper implements Mapper<OrderCreateDto, Order> {
+public class OrderCreateMapper implements Mapper<OrderCreateEditDto, Order> {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
     @Override
-    public Order map(OrderCreateDto fromObject, Order toObject) {
+    public Order map(OrderCreateEditDto fromObject, Order toObject) {
         copy(fromObject, toObject);
         return toObject;
     }
 
     @Override
-    public Order map(OrderCreateDto object) {
+    public Order map(OrderCreateEditDto object) {
         Order order = new Order();
         copy(object, order);
         return order;
     }
 
-    private void copy(OrderCreateDto object, Order order) {
+    private void copy(OrderCreateEditDto object, Order order) {
         order.setUser(getUser(object.getUserId()).get());
         order.setBook(getBook(object.getBookId()).get());
         order.setStatus(OrderStatus.ORDERED);

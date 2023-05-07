@@ -5,7 +5,7 @@ import org.example.service.database.entity.Book;
 import org.example.service.database.querydsl.QPredicates;
 import org.example.service.database.repository.BookRepository;
 import org.example.service.database.repository.OrderRepository;
-import org.example.service.dto.orderDto.OrderCreateDto;
+import org.example.service.dto.orderDto.OrderCreateEditDto;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.dto.orderDto.OrderReadDto;
 import org.example.service.mapper.orderMapper.OrderCreateMapper;
@@ -63,24 +63,28 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderReadDto create(OrderCreateDto orderDto) {
-        OrderReadDto orderReadDto = Optional.of(orderDto)
-                .map(orderCreateEditMapper::map)
-                .map(orderRepository::save)
-                .map(orderReadMapper::map)
-                .orElseThrow();
+    public OrderReadDto create(OrderCreateEditDto orderDto) {
+        if (orderRepository.findByUserIdAndBookId(orderDto.getUserId(), orderDto.getBookId()).isEmpty()) {
+            OrderReadDto orderReadDto = Optional.of(orderDto)
+                    .map(orderCreateEditMapper::map)
+                    .map(orderRepository::save)
+                    .map(orderReadMapper::map)
+                    .orElseThrow();
 
-        Optional<Book> book = bookRepository.findById(orderDto.getBookId());
+            Optional<Book> book = bookRepository.findById(orderDto.getBookId());
 
-        if (book.isPresent() && book.get().getNumber() > 0) {
-            book.get().setNumber(book.get().getNumber() - 1);
-            bookRepository.save(book.get());
+            if (book.isPresent() && book.get().getNumber() > 0) {
+                book.get().setNumber(book.get().getNumber() - 1);
+                bookRepository.save(book.get());
+            }
+            return orderReadDto;
+        } else {
+            throw new IllegalArgumentException("Order with userId " + orderDto.getUserId() + " and bookId " + orderDto.getBookId() + " already exists.");
         }
-        return orderReadDto;
     }
 
     @Transactional
-    public Optional<OrderReadDto> update(Long id, OrderCreateDto orderDto) {
+    public Optional<OrderReadDto> returnBook(Long id, OrderCreateEditDto orderDto) {
         Optional<OrderReadDto> orderReadDto = orderRepository.findById(id)
                 .map(entity -> orderEditMapper.map(orderDto, entity))
                 .map(orderRepository::saveAndFlush)
