@@ -1,6 +1,7 @@
 package org.example.service.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.service.service.CustomUserDetails;
 import org.example.service.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,7 @@ import java.lang.reflect.Proxy;
 import java.util.Set;
 
 import static org.example.service.database.entity.Role.ADMIN;
+import static org.example.service.database.entity.Role.USER;
 
 @Configuration
 @EnableMethodSecurity
@@ -30,10 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
-                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers(HttpMethod.POST, "/books/**").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers("/orders", "/users/registration", "/books", "/users/{\\d+}/update", "/users", "/orders/{id}/delete", "/orders/{id}/update", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
-                        .antMatchers(HttpMethod.POST, "/users").authenticated()
+                        .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete", "/users/registration").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/books/**", "/users").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/orders", "/orders/{id}/update").hasAuthority(USER.getAuthority())
+                        .antMatchers("/orders", "/books", "/users/{\\d+}/update", "/orders/{id}/delete", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
                         .antMatchers("/login").permitAll()
                 )
                 .logout(logout -> logout
@@ -59,8 +61,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
 
-            Set<Method> userDetailsMethods = Set.of(userDetails.getClass().getMethods());
-
+            Set<Method> userDetailsMethods = new java.util.HashSet<>(Set.of(CustomUserDetails.class.getMethods()));
+            userDetailsMethods.addAll(Set.of(UserDetails.class.getMethods()));
             return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
                     new Class[]{UserDetails.class, OidcUser.class},
                     (proxy, method, args) -> userDetailsMethods.contains(method)

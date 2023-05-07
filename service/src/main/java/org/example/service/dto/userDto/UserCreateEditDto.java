@@ -3,7 +3,9 @@ package org.example.service.dto.userDto;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.example.service.database.entity.Role;
+import org.example.service.validation.anotation.Unique;
 import org.example.service.validation.group.CreateAction;
+import org.example.service.validation.group.UpdateAction;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,19 +16,20 @@ import javax.validation.constraints.Size;
 @FieldNameConstants
 public class UserCreateEditDto {
 
-    @NotEmpty
-    @Size(min = 2, max = 25)
+    @NotEmpty(message = "First Name must be not empty")
+    @Size(min = 2, max = 25, message = "First Name must contains from 2 to 25 symbols")
     String firstname;
 
-    @NotEmpty
-    @Size(min = 2, max = 25)
+    @NotEmpty(message = "Last Name must be not empty")
+    @Size(min = 2, max = 25, message = "Last Name must contains from 2 to 25 symbols")
     String lastname;
 
     @Email
+    @Unique(groups = UpdateAction.class, message = "This email already exist", fieldName = "email", entityName = "User")
     String email;
 
-    @NotBlank(groups = CreateAction.class)
-    @Size(min = 8, max = 49)
+    @NotBlank(groups = CreateAction.class, message = "Password must be not empty" )
+    @Size(min = 8, max = 49, message = "Passport must contains at least 8 symbols ")
     String rawPassword;
 
     Role role;

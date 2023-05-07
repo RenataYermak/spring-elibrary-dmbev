@@ -11,10 +11,12 @@ import org.example.service.service.AuthorService;
 import org.example.service.service.BookService;
 import org.example.service.service.CategoryService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +43,7 @@ public class BookController {
     @GetMapping
     public String findAll(Model model,
                           BookFilter filter,
-                          Pageable pageable) {
+                          @PageableDefault Pageable pageable) {
         var page = bookService.findAll(filter, pageable);
         model.addAttribute("books", PageResponse.of(page));
         model.addAttribute("filter", filter);
@@ -68,7 +70,7 @@ public class BookController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute BookCreateEditDto book,
+    public String create(@ModelAttribute @Validated BookCreateEditDto book,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -96,7 +98,14 @@ public class BookController {
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute BookCreateEditDto book) {
+                         @ModelAttribute @Validated BookCreateEditDto book,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("book", book);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/books//{id}/update";
+        }
         return bookService.update(id, book)
                 .map(it -> "redirect:/books/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

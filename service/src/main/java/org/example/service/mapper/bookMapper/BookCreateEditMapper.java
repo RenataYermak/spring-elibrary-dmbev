@@ -38,26 +38,24 @@ public class BookCreateEditMapper implements Mapper<BookCreateEditDto, Book> {
 
     private void copy(BookCreateEditDto object, Book book) {
         book.setTitle(object.getTitle());
-        book.setCategory(getCategory(object.getCategoryId()));
+        book.setCategory(getCategory(object.getCategoryId()).get());
         book.setPublishYear(object.getPublishYear());
         book.setDescription(object.getDescription());
         book.setNumber(object.getNumber());
-        book.setAuthor(getAuthor(object.getAuthorId()));
+        book.setAuthor(getAuthor(object.getAuthorId()).get());
 
         Optional.ofNullable(object.getPicture())
                 .filter(not(MultipartFile::isEmpty))
                 .ifPresent(picture -> book.setPicture(picture.getOriginalFilename()));
     }
 
-    public Author getAuthor(Long authorId) {
+    public Optional<Author> getAuthor(Long authorId) {
         return Optional.ofNullable(authorId)
-                .flatMap(authorRepository::findById)
-                .orElse(null);
+                .flatMap(authorRepository::findById);
     }
 
-    public Category getCategory(Integer categoryId) {
+    public Optional<Category> getCategory(Integer categoryId) {
         return Optional.ofNullable(categoryId)
-                .flatMap(categoryRepository::findById)
-                .orElse(null);
+                .flatMap(categoryRepository::findById);
     }
 }

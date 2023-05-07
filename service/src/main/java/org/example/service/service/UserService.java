@@ -17,10 +17,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
+import static java.util.ResourceBundle.getBundle;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.example.service.database.entity.QUser.user;
 
 @Service
@@ -31,6 +35,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateEditMapper userCreateEditMapper;
+    private final EmailService emailService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
@@ -57,18 +62,26 @@ public class UserService implements UserDetailsService {
                 .map(userReadMapper::map);
     }
 
-    public Optional<UserReadDto> findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .map(userReadMapper::map);
-    }
-
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
-        return Optional.of(userDto)
-                .map(userCreateEditMapper::map)
-                .map(userRepository::save)
-                .map(userReadMapper::map)
-                .orElseThrow();
+        if(userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
+            UserReadDto userReadDto = Optional.of(userDto)
+                    .map(userCreateEditMapper::map)
+                    .map(userRepository::save)
+                    .map(userReadMapper::map)
+                    .orElseThrow();
+
+            if (!isEmpty(userDto.getEmail())) {
+                String messageFromBundle = getBundle("messages", Locale.getDefault()).getString("email.message.registration");
+                String subjectFromBundle = getBundle("messages", Locale.getDefault()).getString("email.subject.registration");
+                String message = MessageFormat.format(messageFromBundle, userDto.getFirstname(), userDto.getEmail(), userDto.getRawPassword());
+                emailService.sendMessage(userDto.getEmail(), subjectFromBundle, message);
+            }
+            return userReadDto;
+        } else {
+            throw new IllegalArgumentException("User with email " + userDto.getEmail()  + " already exists.");
+        }
     }
 
     @Transactional
@@ -94,11 +107,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(user -> new CustomUser(
+                .map(user -> new CustomUserDetails(
+                        user.getId(),
                         user.getEmail(),
                         user.getPassword(),
-                        Collections.singleton(user.getRole()),
-                        user.getId()
+                        Collections.singleton(user.getRole())
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }

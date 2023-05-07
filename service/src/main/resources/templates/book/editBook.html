@@ -21,13 +21,13 @@
             <input type="text" th:value="*{title}" name="title" th:placeholder="#{book.label.title}" class="form-control"><br>
             <select name="authorId" class="form-control">
                 <div th:each="author : ${authors}">
-                    <option selected th:value="${author.id}"><h4 th:text="${author.name}"/></option>
+                    <option th:selected="${book.author.id == author.id}" th:value="${author.id}" th:text="${author.name}"></option>
                 </div>
             </select>
             <br>
             <select name="categoryId" class="form-control">
                 <div th:each="category : ${categories}">
-                    <option selected th:value="${category.id}"><h4 th:text="${category.name}"/></option>
+                    <option th:selected="${book.category.id == category.id}" th:value="${category.id}" th:text="${category.name}"></option>
                 </div>
             </select>
             <br>
