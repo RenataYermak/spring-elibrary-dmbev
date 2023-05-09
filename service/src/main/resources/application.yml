@@ -30,6 +30,10 @@ spring:
           auth: true
           starttls:
             enable: true
+logging:
+  file:
+    path: ./logs
+    name: elibrary.log
 
 springdoc:
   swagger-ui:

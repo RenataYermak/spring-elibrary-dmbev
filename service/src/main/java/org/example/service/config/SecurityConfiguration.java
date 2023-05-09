@@ -1,7 +1,7 @@
 package org.example.service.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.service.service.CustomUserDetails;
+import org.example.service.service.SecurityUserDetailsImpl;
 import org.example.service.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -61,8 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
 
-            Set<Method> userDetailsMethods = new java.util.HashSet<>(Set.of(CustomUserDetails.class.getMethods()));
+            Set<Method> userDetailsMethods = new java.util.HashSet<>(Set.of(SecurityUserDetailsImpl.class.getMethods()));
             userDetailsMethods.addAll(Set.of(UserDetails.class.getMethods()));
+
             return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
                     new Class[]{UserDetails.class, OidcUser.class},
                     (proxy, method, args) -> userDetailsMethods.contains(method)
@@ -71,3 +72,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         };
     }
 }
+
+//        return userRequest -> {
+//            String email = userRequest.getIdToken().getClaim("email");
+//
+//            SecurityUserDetails userDetails = userService.loadUserByUsername(email);
+//
+//            DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
+//
+//            Set<Method> userDetailsMethods = new java.util.HashSet<>(Set.of(SecurityUserDetailsImpl.class.getMethods()));
+//         //   userDetailsMethods.addAll(Set.of(SecurityUserDetails.class.getMethods()));
+//            return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
+//                    new Class[]{SecurityUserDetails.class, OidcUser.class},
+//                    (proxy, method, args) -> userDetailsMethods.contains(method)
+//                            ? method.invoke(userDetails, args)
+//                            : method.invoke(oidcUser, args));
+//        };
+//    }
+//}

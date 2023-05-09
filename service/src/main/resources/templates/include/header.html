@@ -7,7 +7,7 @@
             </a>
         </div>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="margin-left: 50px">
-            <li><a th:href="@{/users/{userId}/update(userId=${#authentication.principal.id})}" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
+            <li><a th:href="@{/users/{userId}/update(userId=${#authentication.principal.getId})}" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
                    class="nav-link px-2 link-dark"><span th:text="#{page.title.my_profile}"></span></a></li>
             <li><a href="/orders" th:if="${#authentication.authorities[0].getAuthority()=='USER'}"
                    class="nav-link px-2 link-dark"><span th:text="#{page.title.my_orders}"></span></a></li>
