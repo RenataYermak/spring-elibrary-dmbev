@@ -39,11 +39,17 @@
                    class="form-control"><br>
             <button type="submit" class="btn btn-success"><span th:text="#{book.button.edit}"></span></button>
         </div>
+        <div style="color: green" th:if="${param.bookSuccessfullyUpdated}">
+            <span th:text="#{book.update.successfully}"></span>
+        </div>
     </form>
     <br>
     <div th:each="book : ${book}">
         <form th:action="@{/books/{bookId}/delete(bookId=${book.id})}" method="post">
             <button class="btn btn-danger" type="submit"><span th:text="#{book.button.delete}"></span></button>
+            <div style="color: green" th:if="${param.bookSuccessfullyDeleted}">
+                <span th:text="#{book.delete.successfully}"></span>
+            </div>
         </form>
     </div>
 </div>

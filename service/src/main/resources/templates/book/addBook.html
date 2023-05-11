@@ -41,6 +41,9 @@
                     th:text="#{book.button.add}"></span></button>
         </div>
     </form>
+    <div style="color: green" th:if="${param.bookSuccessfullyCreated}">
+        <span th:text="#{book.added.successfully}"></span>
+    </div>
 </div>
 <div class="container" th:if="${errors}">
     <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>

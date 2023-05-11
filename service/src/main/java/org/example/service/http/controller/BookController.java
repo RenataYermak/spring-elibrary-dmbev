@@ -79,7 +79,8 @@ public class BookController {
             return "redirect:/books/add";
         }
         bookService.create(book);
-        return "redirect:/books";
+        redirectAttributes.addAttribute("bookSuccessfullyCreated", "true");
+        return "redirect:/books/add";
     }
 
     @GetMapping("/{id}/update")
@@ -104,18 +105,20 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("book", book);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/books//{id}/update";
+            return "redirect:/books/{id}/update";
         }
-        return bookService.update(id, book)
-                .map(it -> "redirect:/books/{id}")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        bookService.update(id, book);
+        redirectAttributes.addAttribute("bookSuccessfullyUpdated", "true");
+        return "redirect:/books/{id}/update";
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long bookId) {
+    public String delete(@PathVariable("id") Long bookId,
+                         RedirectAttributes redirectAttributes) {
         if (!bookService.delete(bookId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        redirectAttributes.addAttribute("bookSuccessfullyDeleted", "true");
         return "redirect:/books";
     }
 }

@@ -13,6 +13,7 @@ import org.example.service.mapper.orderMapper.OrderEditMapper;
 import org.example.service.mapper.orderMapper.OrderReadMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class OrderService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('USER')")
     public OrderReadDto create(OrderCreateEditDto orderDto) {
         if (orderRepository.findByUserIdAndBookId(orderDto.getUserId(), orderDto.getBookId()).isEmpty()) {
             OrderReadDto orderReadDto = Optional.of(orderDto)

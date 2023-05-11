@@ -8,3 +8,6 @@ spring:
   output:
     ansi:
       enabled: always
+  mail:
+    username: budichnik@gmail.com
+    password: dygbdfkvcrpqahhc

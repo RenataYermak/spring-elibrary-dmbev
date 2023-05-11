@@ -27,6 +27,9 @@
 </div>
 <br>
 <div class="container mt-0">
+    <div style="color: green" th:if="${param.userSuccessfullyDeleted}">
+        <span th:text="#{user.deleted.successfully}"></span>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>

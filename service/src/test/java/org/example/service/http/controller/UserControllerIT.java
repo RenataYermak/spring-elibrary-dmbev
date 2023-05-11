@@ -61,7 +61,7 @@ public class UserControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/login")
+                        redirectedUrl("/users/registration?userSuccessfullyCreated=true")
                 );
     }
 
@@ -105,7 +105,7 @@ public class UserControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/users/1")
+                        redirectedUrl("/users/1/update?userSuccessfullyUpdated=true")
                 );
     }
 
@@ -115,7 +115,7 @@ public class UserControllerIT extends IntegrationTestBase {
                 .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/users")
+                        redirectedUrl("/users?userSuccessfullyDeleted=true")
                 );
     }
 }

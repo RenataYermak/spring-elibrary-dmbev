@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
-                <version>1.6.15</version>
+                <version>1.7.0</version>
             </dependency>
             <dependency>
                 <groupId>org.thymeleaf.extras</groupId>
@@ -95,6 +95,15 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco.version}</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>org/example/service/mapper/Mapper.class</exclude>
+                            <exclude>org/example/service/validation/annotation/*</exclude>
+                            <exclude>org/example/service/validation/annotation/impl/*</exclude>
+                            <exclude>org/example/service/service/SecurityUserDetails.class</exclude>
+                            <exclude>org/example/service/ApplicationRunner.class</exclude>
+                        </excludes>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>prepare-agent</id>

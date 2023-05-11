@@ -15,13 +15,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
+import static java.util.ResourceBundle.getBundle;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.database.entity.QUser.user;
 import static org.example.service.util.ConstantUtil.ALL_2_USERS;
@@ -30,9 +32,14 @@ import static org.example.service.util.ConstantUtil.SIZE;
 import static org.example.service.util.ConstantUtil.USER_ID_ONE;
 import static org.example.service.util.ConstantUtil.USER_ID_TWO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +54,9 @@ class UserServiceTest {
     @Mock
     private UserCreateEditMapper userCreateEditMapper;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private UserService userService;
 
@@ -57,7 +67,7 @@ class UserServiceTest {
         doReturn(users).when(userRepository).findAll();
         doReturn(getUserReadDto(), getAnotherUserReadDto()).when(userReadMapper).map(any(User.class));
 
-        var actualResult= userService.findAll();
+        var actualResult = userService.findAll();
 
         assertThat(actualResult).hasSize(ALL_2_USERS);
         assertThat(expectedResult).isEqualTo(actualResult);
@@ -68,15 +78,15 @@ class UserServiceTest {
         var pageable = PageRequest.of(PAGE, SIZE);
         var filter = new UserFilter("renata@gmail.com", "Renata", "Yermak");
         var predicate = getPredicate(filter);
-        Page<User> users = new PageImpl<>(List.of(getUser(), getAnotherUser()), pageable, SIZE);
-        Page<UserReadDto> expectedResult = new PageImpl<>(List.of(
-                getUserReadDto(), getAnotherUserReadDto()), pageable, 1);
+        var users = new PageImpl<>(List.of(getUser(), getAnotherUser()), pageable, SIZE);
+        var expectedResult = new PageImpl<>(List.of(
+                getUserReadDto(), getAnotherUserReadDto()), pageable, SIZE);
         doReturn(users).when(userRepository).findAll(predicate, pageable);
         doReturn(getUserReadDto(), getAnotherUserReadDto()).when(userReadMapper).map(any(User.class));
 
         var actualResult = userService.findAll(filter, pageable);
 
-        assertThat(actualResult).hasSize(SIZE);
+        assertThat(actualResult).hasSize(2);
         assertThat(expectedResult).isEqualTo(actualResult);
     }
 
@@ -94,18 +104,36 @@ class UserServiceTest {
     }
 
     @Test
-    void create() {
-        var userCreateEditDto = getUserCreateDto();
+    void createSuccessful() {
+        var userDto = getUserCreateDto();
         var user = getUser();
         var expectedResult = getUserReadDto();
-        doReturn(user).when(userCreateEditMapper).map(userCreateEditDto);
+        String messageFromBundle = getBundle("messages", Locale.getDefault()).getString("email.message.registration");
+        String subjectFromBundle = getBundle("messages", Locale.getDefault()).getString("email.subject.registration");
+        String message = MessageFormat.format(messageFromBundle, user.getFirstname(), user.getEmail(), user.getPassword());
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.empty());
+        doReturn(user).when(userCreateEditMapper).map(userDto);
         doReturn(user).when(userRepository).save(user);
         doReturn(expectedResult).when(userReadMapper).map(user);
+        doNothing().when(emailService).sendMessage(expectedResult.getEmail(), subjectFromBundle, message);
 
-        var actualResult = userService.create(userCreateEditDto);
+        var actualResult = userService.create(userDto);
 
         assertThat(actualResult.getId()).isNotNull();
         assertThat(expectedResult).isEqualTo(actualResult);
+    }
+
+
+    @Test
+    void createUserEmailAlreadyExistsThrowsIllegalArgumentException() {
+        var userDto = getUserCreateDto();
+
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new User()));
+
+        assertThrows(IllegalArgumentException.class, () -> userService.create(userDto));
+
+        verify(userRepository).findByEmail(userDto.getEmail());
+        verifyNoInteractions(userCreateEditMapper, userReadMapper, emailService);
     }
 
     @Test

@@ -24,13 +24,16 @@
                     <div class="card-body">
                         <p class="card-title">
                         <h3 th:text="${book.title}"/></p>
-                        <span class="card-text" style="display: inline-block;"><h5 th:text="${book.author.name}"/></span>
+                        <span class="card-text" style="display: inline-block;"><h5
+                                th:text="${book.author.name}"/></span>
                         <br>
-                        <span class="card-text" style="display: inline-block"><h5 th:text="${book.category.name}"/></span>
-                        <span class="card-text" style="display: inline-block"><h5 th:text=" ${book.publishYear}"/></span>
+                        <span class="card-text" style="display: inline-block"><h5
+                                th:text="${book.category.name}"/></span>
+                        <span class="card-text" style="display: inline-block"><h5
+                                th:text=" ${book.publishYear}"/></span>
                         <br>
-                        <div  th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
-                            <form class="btn-group" th:action="@{/orders}" method="post" >
+                        <div th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
+                            <form class="btn-group" th:action="@{/orders}" method="post">
                                 <input type="hidden" name="bookId" th:value="${book.id}"/>
                                 <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
                                 <th:block th:if="${book.number > 0}">
@@ -40,7 +43,8 @@
                                         <option value="SEASON_TICKET"><span
                                                 th:text="#{orders.label.reading_room}"></span></option>
                                     </select>
-                                    <button class="btn-group btn btn-success"  style="display: inline-block;  background-color: royalblue" type="submit">
+                                    <button class="btn-group btn btn-success"
+                                            style="display: inline-block;  background-color: royalblue" type="submit">
                                         <span th:text="#{book.button.order}"></span></button>
                                 </th:block>
                             </form>

@@ -28,6 +28,15 @@
                 type="submit"><span th:text="#{label.filter}"></span>
         </button>
     </form>
+    <div style="color: green" th:if="${param.bookSuccessfullyDeleted}">
+        <span th:text="#{book.delete.successfully}"></span>
+    </div>
+    <div style="color: green" th:if="${param.orderSuccessfullyCreated}">
+        <span th:text="#{book.order.successfully}"></span>
+    </div>
+    <div class="container" th:if="${errors}">
+        <p style="color:red" th:each="error:${errors}" th:text="${error.defaultMessage}"> Error message</p>
+    </div>
 </div>
 <br>
 <div>

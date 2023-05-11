@@ -50,11 +50,11 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public String orderFindById(@PathVariable("id") Long orderId, Model model) {
+    public String findById(@PathVariable("id") Long orderId, Model model) {
         return orderService.findById(orderId)
                 .map(order -> {
                     model.addAttribute("order", order);
-                    return "order/order";
+                    return "order/orders";
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
@@ -69,22 +69,26 @@ public class OrderController {
             return "redirect:/books";
         }
         orderService.create(order);
+        redirectAttributes.addAttribute("orderSuccessfullyCreated", "true");
+        return "redirect:/books";
+    }
+
+    @GetMapping("/{id}/update")
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute OrderCreateEditDto order,
+                         RedirectAttributes redirectAttributes) {
+        orderService.returnBook(id, order);
+        redirectAttributes.addAttribute("orderSuccessfullyUpdated", "true");
         return "redirect:/orders";
     }
 
-    @GetMapping( "/{id}/update")
-    public String update(@PathVariable("id") Long id,
-                         @ModelAttribute OrderCreateEditDto order) {
-        return orderService.returnBook(id, order)
-                .map(it -> "redirect:/orders")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long orderId) {
+    public String delete(@PathVariable("id") Long orderId,
+                         RedirectAttributes redirectAttributes) {
         if (!orderService.delete(orderId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        redirectAttributes.addAttribute("orderSuccessfullyDeleted", "true");
         return "redirect:/orders";
     }
 }

@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -74,10 +73,10 @@ class BookServiceTest {
     @Test
     void findAllWithFilter() {
         var pageable = PageRequest.of(PAGE, SIZE);
-        var filter = new BookFilter(1937, "Detective", "Agata");
+        var filter = new BookFilter(2000, "Novel", "Ernest", "title");
         var predicate = getPredicate(filter);
-        Page<Book> books = new PageImpl<>(List.of(getBook(), getAnotherBook()), pageable, SIZE);
-        Page<BookReadDto> expectedResult = new PageImpl<>(List.of(
+        var books = new PageImpl<>(List.of(getBook(), getAnotherBook()), pageable, SIZE);
+        var expectedResult = new PageImpl<>(List.of(
                 getBookReadDto(), getAnotherBookReadDto()), pageable, SIZE);
         doReturn(books).when(bookRepository).findAll(predicate, pageable);
         doReturn(getBookReadDto(), getAnotherBookReadDto()).when(bookReadMapper).map(any(Book.class));
@@ -248,8 +247,9 @@ class BookServiceTest {
     private Predicate getPredicate(BookFilter filter) {
         return QPredicates.builder()
                 .add(filter.publishYear(), book.publishYear::eq)
-                .add(filter.category(), book.category.name::eq)
-                .add(filter.author(), book.author.name::eq)
+                .add(filter.category(), book.category.name::containsIgnoreCase)
+                .add(filter.author(), book.author.name::containsIgnoreCase)
+                .add(filter.title(), book.title::containsIgnoreCase)
                 .build();
     }
 

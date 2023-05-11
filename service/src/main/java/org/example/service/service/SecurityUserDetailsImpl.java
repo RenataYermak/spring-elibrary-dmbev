@@ -3,13 +3,12 @@ package org.example.service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 @Value
 @RequiredArgsConstructor
-public class SecurityUserDetailsImpl implements UserDetails {
+public class SecurityUserDetailsImpl implements SecurityUserDetails {
 
     Long id;
     String email;

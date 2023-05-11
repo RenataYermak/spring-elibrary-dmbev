@@ -1,8 +1,8 @@
-package org.example.service.validation.anotation.impl;
+package org.example.service.validation.annotation.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.service.validation.anotation.UniqueValidator;
-import org.example.service.validation.anotation.Unique;
+import org.example.service.validation.annotation.UniqueValidator;
+import org.example.service.validation.annotation.Unique;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

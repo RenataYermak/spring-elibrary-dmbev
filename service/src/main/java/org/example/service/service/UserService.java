@@ -11,7 +11,6 @@ import org.example.service.mapper.userMapper.UserReadMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,6 @@ public class UserService implements UserDetailsService {
                 .map(userReadMapper::map)
                 .toList();
     }
-
 
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
@@ -105,7 +103,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SecurityUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .map(user -> new SecurityUserDetailsImpl(
                         user.getId(),

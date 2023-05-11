@@ -8,6 +8,7 @@ import org.example.service.dto.PageResponse;
 import org.example.service.dto.userDto.UserCreateEditDto;
 import org.example.service.dto.userDto.UserFilter;
 import org.example.service.service.UserService;
+import org.example.service.validation.group.CreateAction;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.groups.Default;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute @Validated UserCreateEditDto user,
+    public String create(@ModelAttribute @Validated({Default.class, CreateAction.class}) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -75,7 +77,8 @@ public class UserController {
             return "redirect:/users/registration";
         }
         userService.create(user);
-        return "redirect:/login";
+        redirectAttributes.addAttribute("userSuccessfullyCreated", "true");
+        return "redirect:/users/registration";
     }
 
     @GetMapping("/{id}/update")
@@ -100,18 +103,21 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/users/{id}/updated";
+            return "redirect:/users/{id}/update";
         }
-        return userService.update(id, user)
-                .map(it -> "redirect:/users")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        userService.update(id, user);
+        redirectAttributes.addAttribute("userSuccessfullyUpdated", "true");
+        return "redirect:/users/{id}/update";
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id,
+                         RedirectAttributes redirectAttributes) {
         if (!userService.delete(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        redirectAttributes.addAttribute("userSuccessfullyDeleted", "true");
         return "redirect:/users";
     }
 }
