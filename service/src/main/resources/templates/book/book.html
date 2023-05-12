@@ -38,9 +38,9 @@
                                 <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
                                 <th:block th:if="${book.number > 0}">
                                     <select class="btn-group form-control" name="type" style="display: inline-block">
-                                        <option value="READING_ROOM" selected="selected"><span
+                                        <option value="SEASON_TICKET" selected="selected"><span
                                                 th:text="#{orders.label.season_ticket}"></span></option>
-                                        <option value="SEASON_TICKET"><span
+                                        <option value="READING_ROOM"><span
                                                 th:text="#{orders.label.reading_room}"></span></option>
                                     </select>
                                     <button class="btn-group btn btn-success"
