@@ -6,3 +6,5 @@
 .idea/
 /.idea/
 application-test.yml
+logs/
+images/
