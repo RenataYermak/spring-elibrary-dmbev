@@ -18,5 +18,4 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderFilter
             "WHERE o.book_id = :bookId AND o.user_id = :userId AND o.status = 'ORDERED' ",
             nativeQuery = true)
     Optional<Long> findByUserIdAndBookId(Long userId, Long bookId);
-
 }

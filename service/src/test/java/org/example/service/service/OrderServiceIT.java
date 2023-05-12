@@ -8,14 +8,11 @@ import org.example.service.dto.bookDto.AuthorReadDto;
 import org.example.service.dto.bookDto.BookReadDto;
 import org.example.service.dto.bookDto.CategoryReadDto;
 import org.example.service.dto.orderDto.OrderCreateEditDto;
-import org.example.service.dto.orderDto.OrderReadDto;
 import org.example.service.dto.userDto.UserReadDto;
 import org.example.service.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.util.ConstantUtil.ALL_ORDERS;
@@ -38,13 +35,13 @@ public class OrderServiceIT extends IntegrationTestBase {
 
     @Test
     void findAll() {
-        List<OrderReadDto> result = orderService.findAll();
+        var result = orderService.findAll();
         assertThat(result).hasSize(ALL_ORDERS);
     }
 
     @Test
     void findById() {
-        Optional<OrderReadDto> maybeOrder = orderService.findById(ORDER_ID_ONE);
+        var maybeOrder = orderService.findById(ORDER_ID_ONE);
         assertTrue(maybeOrder.isPresent());
         maybeOrder.ifPresent(order -> {
             assertEquals("renatayermak@gmail.com", order.getUser().getEmail());
@@ -54,7 +51,7 @@ public class OrderServiceIT extends IntegrationTestBase {
 
     @Test
     void create() {
-        OrderCreateEditDto orderDto = new OrderCreateEditDto(
+        var orderDto = new OrderCreateEditDto(
                 getUserReadDto().getId(),
                 getBookReadDto().getId(),
                 OrderStatus.ORDERED,
@@ -62,7 +59,7 @@ public class OrderServiceIT extends IntegrationTestBase {
                 LocalDateTime.now(),
                 null
         );
-        OrderReadDto actualResult = orderService.create(orderDto);
+        var actualResult = orderService.create(orderDto);
         assertEquals(orderDto.getUserId(), actualResult.getUser().getId());
         assertEquals(orderDto.getBookId(), actualResult.getBook().getId());
         assertSame(orderDto.getStatus(), actualResult.getStatus());
@@ -71,7 +68,7 @@ public class OrderServiceIT extends IntegrationTestBase {
 
     @Test
     void update() {
-        OrderCreateEditDto orderDto = new OrderCreateEditDto(
+        var orderDto = new OrderCreateEditDto(
                 USER_ID_ONE,
                 BOOK_ID_FOUR,
                 OrderStatus.RETURNED,
@@ -79,7 +76,7 @@ public class OrderServiceIT extends IntegrationTestBase {
                 LocalDateTime.of(2023, 3, 4, 6, 54, 0, 000000),
                 LocalDateTime.now()
         );
-        Optional<OrderReadDto> actualResult = orderService.returnBook(ORDER_ID_TWO, orderDto);
+        var actualResult = orderService.returnBook(ORDER_ID_TWO, orderDto);
         assertTrue(actualResult.isPresent());
 
         actualResult.ifPresent(
@@ -93,7 +90,7 @@ public class OrderServiceIT extends IntegrationTestBase {
         );
     }
 
-   @Test
+    @Test
     void delete() {
         assertFalse(orderService.delete(-2345678L));
         assertTrue(orderService.delete(ORDER_ID_ONE));

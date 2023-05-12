@@ -280,7 +280,7 @@ class BookServiceTest {
                 .name("Ernest Hemingway")
                 .build();
     }
-    
+
     private AuthorReadDto getAuthorReadDto() {
         return new AuthorReadDto(
                 AUTHOR_ID_ONE,

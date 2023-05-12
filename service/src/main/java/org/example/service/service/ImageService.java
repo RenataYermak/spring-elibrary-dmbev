@@ -22,7 +22,7 @@ public class ImageService {
 
     @SneakyThrows
     public void upload(String imagePath, InputStream content) {
-        Path fullImagePath = Path.of(uploadPath, imagePath);
+        var fullImagePath = Path.of(uploadPath, imagePath);
 
         try (content) {
             Files.createDirectories(fullImagePath.getParent());
@@ -32,7 +32,7 @@ public class ImageService {
 
     @SneakyThrows
     public Optional<byte[]> get(String imagePath) {
-        Path fullImagePath = Path.of(uploadPath, imagePath);
+        var fullImagePath = Path.of(uploadPath, imagePath);
 
         return Files.exists(fullImagePath)
                 ? Optional.of(Files.readAllBytes(fullImagePath))

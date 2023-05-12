@@ -98,6 +98,7 @@
                     <configuration>
                         <excludes>
                             <exclude>org/example/service/mapper/Mapper.class</exclude>
+                            <exclude>org/example/service/database/entity/*</exclude>
                             <exclude>org/example/service/validation/annotation/*</exclude>
                             <exclude>org/example/service/validation/annotation/impl/*</exclude>
                             <exclude>org/example/service/service/SecurityUserDetails.class</exclude>

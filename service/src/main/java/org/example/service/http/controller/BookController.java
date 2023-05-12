@@ -2,7 +2,6 @@ package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.database.entity.Book;
 import org.example.service.database.repository.BookRepository;
 import org.example.service.dto.PageResponse;
 import org.example.service.dto.bookDto.BookCreateEditDto;
@@ -26,8 +25,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -38,7 +35,6 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final CategoryService categoryService;
-    private final BookRepository bookRepository;
 
     @GetMapping
     public String findAll(Model model,
@@ -85,11 +81,11 @@ public class BookController {
 
     @GetMapping("/{id}/update")
     public String update(@PathVariable(value = "id") long bookId, Model model) {
-        if (!bookRepository.existsById(bookId)) {
+        var book = bookService.findById(bookId);
+        if(book.isEmpty()){
             return "redirect:/books";
         }
-        Optional<Book> book = bookRepository.findById(bookId);
-        List<Book> result = new ArrayList<>();
+        var result = new ArrayList<>();
         book.ifPresent(result::add);
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("categories", categoryService.findAll());

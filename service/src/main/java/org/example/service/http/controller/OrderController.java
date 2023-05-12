@@ -37,7 +37,7 @@ public class OrderController {
         return "order/orders";
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public String findAllByUserId(Model model,
                                   @PathVariable("userId") Long userId,
                                   OrderFilter filter,

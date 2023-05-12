@@ -110,12 +110,22 @@ public class UserControllerIT extends IntegrationTestBase {
     }
 
     @Test
-    void delete() throws Exception {
+    void deleteSuccessfully() throws Exception {
         mockMvc.perform(post("/users/1/delete")
-                .with(csrf()))
+                        .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/users?userSuccessfullyDeleted=true")
+                );
+    }
+
+    @Test
+    void deleteNotExistUser() throws Exception {
+        mockMvc.perform(post("/users/99999999999999/delete")
+                        .with(csrf()))
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        view().name("error/error404")
                 );
     }
 }

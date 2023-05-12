@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Value
 @FieldNameConstants
-@UniqueBookOrder(message = "This book already ordered")
+@UniqueBookOrder(message = "Order rejected! You already have an order for this book.")
 public class OrderCreateEditDto {
 
     Long userId;

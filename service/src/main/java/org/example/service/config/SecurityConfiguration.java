@@ -34,9 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeHttpRequests(urlConfig -> urlConfig
                         .antMatchers("/users/{\\d+}/delete", "/books/add", "/books/{\\d+}/update", "/books/{\\d+}/delete", "/users/registration").hasAuthority(ADMIN.getAuthority())
-                        .antMatchers(HttpMethod.POST, "/books/**", "/users","/users/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
+                        .antMatchers(HttpMethod.POST, "/books/**", "/users", "/users/{\\d+}/delete").hasAuthority(ADMIN.getAuthority())
                         .antMatchers(HttpMethod.POST, "/orders", "/orders/{\\d+}/update").hasAuthority(USER.getAuthority())
-                        .antMatchers(HttpMethod.POST,"/users/{\\d+}/update").authenticated()
+                        .antMatchers(HttpMethod.POST, "/users/{\\d+}/update").authenticated()
                         .antMatchers("/orders", "/books", "/users/{\\d+}/update", "/orders/{\\d+}/delete", "/v3/api-docs/**", "/swagger-ui/**").authenticated()
                         .antMatchers("/login").permitAll()
                 )
@@ -59,9 +59,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return userRequest -> {
             String email = userRequest.getIdToken().getClaim("email");
 
-            SecurityUserDetails userDetails = userService.loadUserByUsername(email);
+            var securityUserDetails = userService.loadUserByUsername(email);
 
-            DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
+            var oidcUser = new DefaultOidcUser(securityUserDetails.getAuthorities(), userRequest.getIdToken());
 
             Set<Method> userDetailsMethods = new HashSet<>(Set.of(SecurityUserDetailsImpl.class.getMethods()));
             userDetailsMethods.addAll(Set.of(SecurityUserDetails.class.getMethods()));
@@ -69,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(),
                     new Class[]{SecurityUserDetails.class, OidcUser.class},
                     (proxy, method, args) -> userDetailsMethods.contains(method)
-                            ? method.invoke(userDetails, args)
+                            ? method.invoke(securityUserDetails, args)
                             : method.invoke(oidcUser, args));
         };
     }

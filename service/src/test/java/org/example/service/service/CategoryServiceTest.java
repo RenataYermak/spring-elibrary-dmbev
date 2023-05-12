@@ -24,8 +24,10 @@ public class CategoryServiceTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
     @Mock
     private CategoryReadMapper categoryReadMapper;
+
     @InjectMocks
     private CategoryService categoryService;
 

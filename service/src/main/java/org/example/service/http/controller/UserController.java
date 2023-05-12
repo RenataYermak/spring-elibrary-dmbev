@@ -2,8 +2,6 @@ package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.Role;
-import org.example.service.database.entity.User;
-import org.example.service.database.repository.UserRepository;
 import org.example.service.dto.PageResponse;
 import org.example.service.dto.userDto.UserCreateEditDto;
 import org.example.service.dto.userDto.UserFilter;
@@ -26,8 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.groups.Default;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -35,7 +31,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping
     public String findAll(Model model,
@@ -84,11 +79,11 @@ public class UserController {
     @GetMapping("/{id}/update")
     public String userEdit(@PathVariable(value = "id") Long userId,
                            Model model) {
-        if (!userRepository.existsById(userId)) {
-            return "redirect:/users";
+        var user = userService.findById(userId);
+        if (user.isEmpty()) {
+            return "redirect:/books";
         }
-        Optional<User> user = userRepository.findById(userId);
-        List<User> result = new ArrayList<>();
+        var result = new ArrayList<>();
         user.ifPresent(result::add);
         model.addAttribute("roles", Role.values());
         model.addAttribute("user", result);

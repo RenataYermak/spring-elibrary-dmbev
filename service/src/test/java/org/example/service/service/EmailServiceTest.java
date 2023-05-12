@@ -35,10 +35,10 @@ class EmailServiceTest {
 
         emailService.sendMessage(to, subject, text);
 
-        ArgumentCaptor<SimpleMailMessage> messageCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        var messageCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
         Mockito.verify(mailSender, Mockito.times(1)).send(messageCaptor.capture());
 
-        SimpleMailMessage message = messageCaptor.getValue();
+        var message = messageCaptor.getValue();
         assertEquals(username, message.getFrom());
         assertEquals(to, Objects.requireNonNull(message.getTo())[0]);
         assertEquals(subject, message.getSubject());

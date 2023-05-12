@@ -22,7 +22,6 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ${USERNAME}
-#    ${USERNAME}
     password: ${PASSWORD}
     test-connection: true
     properties:
@@ -30,11 +29,9 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
+           enable: true
 logging:
-  file:
-    path: /Users/Renatka/IdeaProjects/spring-elibrary-project/logs
-    name: elibrary.log
+  config: classpath:logback-spring-tmp.xml
 
 springdoc:
   swagger-ui:

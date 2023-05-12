@@ -3,14 +3,12 @@ package org.example.service.http.controller.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.example.service.dto.bookDto.AuthorReadDto;
-import org.example.service.dto.bookDto.BookCreateEditDto;
 import org.example.service.dto.bookDto.BookReadDto;
 import org.example.service.dto.bookDto.CategoryReadDto;
 import org.example.service.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -48,59 +46,24 @@ class BookRestControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.title").value("Death on the Nile"));
     }
 
-
-//    @Test
-//    void create() throws Exception {
-//        var bookCreateDto = getBookCreateDto();
-//        mockMvc.perform(MockMvcRequestBuilders.post(URL_REST_PREFIX)
-//                        .with(csrf())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(bookCreateDto))
-//                )
-//                .andExpectAll(
-//                        status().isCreated(),
-//                        content().contentType(MediaType.APPLICATION_JSON),
-//                        jsonPath("$.title").exists(),
-//                        jsonPath("$.category").exists(),
-//                        jsonPath("$.author").exists(),
-//                        jsonPath("$.publishYear").exists(),
-//                        jsonPath("$.description").exists(),
-//                        jsonPath("$.number").exists(),
-//                        jsonPath("$.picture").exists()
-//                );
-//    }
-//
-//    @Test
-//    void update() throws Exception {
-//        var bookReadDto = getBookReadDto();
-//        var updatedBookDto = getUpdatedBookDto();
-//        var bookId = bookReadDto.getId();
-//        mockMvc.perform(put(URL_REST_PREFIX + "/" + bookId + "/update")
-//                        .with(csrf())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(updatedBookDto))
-//                )
-//                .andExpectAll(
-//                        status().is2xxSuccessful(),
-//                        content().contentType(MediaType.APPLICATION_JSON),
-//                        jsonPath("$.title").exists(),
-//                        jsonPath("$.category").exists(),
-//                        jsonPath("$.author").exists(),
-//                        jsonPath("$.publishYear").exists(),
-//                        jsonPath("$.description").exists(),
-//                        jsonPath("$.number").exists(),
-//                        jsonPath("$.picture").exists()
-//                );
-//    }
-
     @Test
-    void delete() throws Exception {
+    void deleteSuccessfully() throws Exception {
         var bookReadDto = getBookReadDto();
         Long id = bookReadDto.getId();
         mockMvc.perform(MockMvcRequestBuilders.delete(URL_REST_PREFIX + "/" + id + "/delete")
                         .with(csrf()))
                 .andExpectAll(
                         status().isNoContent()
+                );
+    }
+
+    @Test
+    void deleteNotExistBook() throws Exception {
+        long id = 999999999999999L;
+        mockMvc.perform(MockMvcRequestBuilders.delete(URL_REST_PREFIX + "/" + id + "/delete")
+                        .with(csrf()))
+                .andExpectAll(
+                        status().isNotFound()
                 );
     }
 
@@ -115,30 +78,6 @@ class BookRestControllerTest extends IntegrationTestBase {
                 getAuthorReadDto(),
                 "1.png"
 
-        );
-    }
-
-    private BookCreateEditDto getBookCreateDto() {
-        return new BookCreateEditDto(
-                "title",
-                getAuthorReadDto().getId(),
-                getCategoryReadDto().getId(),
-                2000,
-                "description",
-                12,
-                new MockMultipartFile("test", new byte[0])
-        );
-    }
-
-    private BookCreateEditDto getUpdatedBookDto() {
-        return new BookCreateEditDto(
-                "titleNew",
-                getAuthorReadDto().getId(),
-                getCategoryReadDto().getId(),
-                2021,
-                "description",
-                12,
-                new MockMultipartFile("test", new byte[0])
         );
     }
 

@@ -8,7 +8,6 @@ import org.example.service.validation.annotation.UniqueBookValidator;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidatorContext;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,11 +25,11 @@ public class UniqueBookValidatorImpl implements UniqueBookValidator {
             return true;
         }
 
-        OrderCreateEditDto dto = (OrderCreateEditDto) value;
+        var dto = (OrderCreateEditDto) value;
         long bookIdValue = dto.getBookId();
         long userIdValue = dto.getUserId();
 
-        Optional<Long> orderId = orderRepository.findByUserIdAndBookId(userIdValue, bookIdValue);
+        var orderId = orderRepository.findByUserIdAndBookId(userIdValue, bookIdValue);
         return orderId.isEmpty();
     }
 }

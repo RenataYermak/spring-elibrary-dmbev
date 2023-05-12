@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
             UserReadDto userReadDto = Optional.of(userDto)
                     .map(userCreateEditMapper::map)
                     .map(userRepository::save)
@@ -78,7 +78,7 @@ public class UserService implements UserDetailsService {
             }
             return userReadDto;
         } else {
-            throw new IllegalArgumentException("User with email " + userDto.getEmail()  + " already exists.");
+            throw new IllegalArgumentException("User with email " + userDto.getEmail() + " already exists.");
         }
     }
 
