@@ -43,9 +43,9 @@ Administrator manages Readers and Books.
 
 <img width="1208" alt="Снимок экрана 2023-05-12 в 17 34 02" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/ad57944b-964b-4213-81ff-430a4716e515">
 <img width="458" alt="Снимок экрана 2023-05-12 в 17 34 42" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/c95caffc-3ce3-461b-bbba-4f4a7e4fe166">
-<img width="1100" alt="Снимок экрана 2023-05-12 в 17 37 04" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/b18f9308-07
-<img width="925" alt="Снимок экрана 2023-05-12 в 17 35 25" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/82ea9c8c-7341-
-<img width="909" alt="Снимок экрана 2023-05-12 в 17 35 41" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/abd3b3cd-c793-47d9-
+<img width="1100" alt="Снимок экрана 2023-05-12 в 17 37 04" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/edfa930e-5266-48b7-bca4-105e3aab008f">
+<img width="925" alt="Снимок экрана 2023-05-12 в 17 35 25" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/3dfe29f7-8e72-40cf-b931-33833b8d2547">
+<img width="909" alt="Снимок экрана 2023-05-12 в 17 35 41" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/9865d7ad-37b8-435a-b3da-d67606a83b22">
 <img width="1100" alt="Снимок экрана 2023-05-12 в 17 36 39" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/2fb0ae38-fa7e-46ec-819d-442838646229">
 <img width="848" alt="Снимок экрана 2023-05-12 в 17 36 19" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/ec281f2a-b987-4596-9ba5-1c396d177483">
 <img width="572" alt="Снимок экрана 2023-05-12 в 17 31 15" src="https://github.com/RenataYermak/spring-elibrary-dmbev/assets/72652915/08ea6648-7ab1-458a-a850-707d6aae67ce">
