@@ -5,6 +5,7 @@ import org.example.service.database.entity.Role;
 import org.example.service.database.repository.UserRepository;
 import org.example.service.dto.userDto.UserFilter;
 import org.example.service.integration.IntegrationTestBase;
+import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -73,29 +74,6 @@ public class UserRepositoryIT extends IntegrationTestBase {
 
         assertThat(actualUser).isPresent();
         assertThat(actualUser.get().getEmail()).isEqualTo("newemail@gmail.com");
-    }
-
-    @Test
-    void findExistUserByEmailAndPassword() {
-        var email = "renatayermak@gmail.com";
-        var password = "1212";
-
-        var users = userRepository.findAllByEmailAndPassword(email, password);
-        entityManager.clear();
-
-        assertNotNull(users);
-        assertThat(users).hasSize(1);
-        assertThat(users.get(0).getId()).isEqualTo(1);
-    }
-
-    @Test
-    void findNotExistUserByEmailAndPassword() {
-        var email = "yermakrenata@gmail.com";
-        var password = "1313";
-        var users = userRepository.findAllByEmailAndPassword(email, password);
-        entityManager.clear();
-
-        assertThat(users).hasSize(0);
     }
 
     @Test

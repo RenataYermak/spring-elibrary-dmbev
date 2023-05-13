@@ -3,9 +3,8 @@ package org.example.service.dto.userDto;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.example.service.database.entity.Role;
-import org.example.service.validation.anotation.Unique;
+import org.example.service.validation.annotation.Unique;
 import org.example.service.validation.group.CreateAction;
-import org.example.service.validation.group.UpdateAction;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,10 +24,10 @@ public class UserCreateEditDto {
     String lastname;
 
     @Email
-    @Unique(groups = UpdateAction.class, message = "This email already exist", fieldName = "email", entityName = "User")
+    @Unique(groups = CreateAction.class, message = "This email already exist", fieldName = "email", entityName = "User")
     String email;
 
-    @NotBlank(groups = CreateAction.class, message = "Password must be not empty" )
+    @NotBlank(groups = CreateAction.class, message = "Password must be not empty")
     @Size(min = 8, max = 49, message = "Passport must contains at least 8 symbols ")
     String rawPassword;
 

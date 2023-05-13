@@ -61,7 +61,7 @@ public class UserControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/login")
+                        redirectedUrl("/users/registration?userSuccessfullyCreated=true")
                 );
     }
 
@@ -105,17 +105,27 @@ public class UserControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/users/1")
+                        redirectedUrl("/users/1/update?userSuccessfullyUpdated=true")
                 );
     }
 
     @Test
-    void delete() throws Exception {
+    void deleteSuccessfully() throws Exception {
         mockMvc.perform(post("/users/1/delete")
-                .with(csrf()))
+                        .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/users")
+                        redirectedUrl("/users?userSuccessfullyDeleted=true")
+                );
+    }
+
+    @Test
+    void deleteNotExistUser() throws Exception {
+        mockMvc.perform(post("/users/99999999999999/delete")
+                        .with(csrf()))
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        view().name("error/error404")
                 );
     }
 }

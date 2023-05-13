@@ -18,11 +18,16 @@
         <div th:each="user : ${user}" th:object="${user}">
             <input type="text" th:value="*{firstname}" name="firstname" th:placeholder="#{user.label.first_name}"
                    class="form-control"><br>
-            <input type="text" th:value="*{lastname}" name="lastname" th:placeholder="#{user.label.second_name}" class="form-control"><br>
-            <input type="text" th:value="*{email}" name="email" th:placeholder="#{user.label.email}" class="form-control"><br>
+            <input type="text" th:value="*{lastname}" name="lastname" th:placeholder="#{user.label.second_name}"
+                   class="form-control"><br>
+            <input type="text" th:value="*{email}" name="email" th:placeholder="#{user.label.email}"
+                   class="form-control"><br>
             <div th:each="role : ${roles}" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}">
                 <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
                 <label th:for="${role}" th:text="${role}"><span th:text="#{register.label.role}"></span></label>
+            </div>
+            <div th:if="${#authentication.authorities[0].getAuthority()=='USER'}">
+                <input type="radio" name="role" th:text="*{role}" th:value="*{role}" th:checked="${user.role}">
             </div>
             <br>
             <button type="submit" class="btn btn-success"><span th:text="#{user.button.submit}"></span></button>
@@ -30,9 +35,12 @@
     </form>
     <br>
     <div th:each="user : ${user}">
-        <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${user.role.name() == 'ADMIN'}" method="post">
+        <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${#authentication.authorities[0].getAuthority()=='ADMIN'}" method="post">
             <button class="btn btn-danger" type="submit"><span th:text="#{users.button.delete}"></span></button>
         </form>
+    </div>
+    <div style="color: green" th:if="${param.userSuccessfullyUpdated}">
+        <span th:text="#{user.update.successfully}"></span>
     </div>
 </div>
 <div class="container" th:if="${errors}">

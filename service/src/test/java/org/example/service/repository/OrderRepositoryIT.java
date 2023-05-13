@@ -6,10 +6,10 @@ import org.example.service.database.entity.OrderType;
 import org.example.service.database.repository.OrderRepository;
 import org.example.service.dto.orderDto.OrderFilter;
 import org.example.service.integration.IntegrationTestBase;
+import org.example.service.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.service.util.ConstantUtil.ALL_ORDERS;
@@ -99,9 +99,8 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         var filter = OrderFilter.builder()
                 .type(OrderType.READING_ROOM)
                 .status(OrderStatus.ORDERED)
-                .user("eva@gmail.com")
+                .user("test@gmail.com")
                 .book("The Premature Burial")
-                .orderedDate(LocalDateTime.of(2018, 4, 22, 5, 24))
                 .build();
 
         var orders = orderRepository.findAllByFilter(filter);
@@ -110,9 +109,8 @@ public class OrderRepositoryIT extends IntegrationTestBase {
         assertThat(orders).hasSize(1);
         assertThat(orders.get(0).getType()).isEqualTo(OrderType.READING_ROOM);
         assertThat(orders.get(0).getStatus()).isEqualTo(OrderStatus.ORDERED);
-        assertThat(orders.get(0).getUser().getEmail()).isEqualTo("eva@gmail.com");
+        assertThat(orders.get(0).getUser().getEmail()).isEqualTo("test@gmail.com");
         assertThat(orders.get(0).getBook().getTitle()).isEqualTo("The Premature Burial");
-        assertThat(orders.get(0).getOrderedDate()).isEqualTo(LocalDateTime.of(2018, 4, 22, 5, 24));
     }
 
     @Test

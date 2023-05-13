@@ -13,6 +13,12 @@
 </div>
 <div class="container mt-0">
     <h3><span>All Orders</span></h3>
+    <div style="color: green" th:if="${param.orderSuccessfullyDeleted}">
+        <span th:text="#{order.delete.successfully}"></span>
+    </div>
+    <div style="color: green" th:if="${param.orderSuccessfullyUpdated}">
+        <span th:text="#{order.update.successfully}"></span>
+    </div>
     <br>
     <form action="/orders">
         <select class="custom-select form-control" name="type" style="width: 13%; display: inline-block; border-color: #282727; border-width: 1px">

@@ -26,6 +26,7 @@ public class AuthorServiceTest {
     private AuthorRepository authorRepository;
     @Mock
     private AuthorReadMapper authorReadMapper;
+
     @InjectMocks
     private AuthorService authorService;
 

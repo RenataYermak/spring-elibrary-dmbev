@@ -117,17 +117,27 @@ public class BookControllerIT extends IntegrationTestBase {
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/books/2")
+                        redirectedUrl("/books/2/update")
                 );
     }
 
     @Test
-    void delete() throws Exception {
+    void deleteSuccessfully() throws Exception {
         mockMvc.perform(post("/books/1/delete")
                         .with(csrf()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/books")
+                        redirectedUrl("/books?bookSuccessfullyDeleted=true")
+                );
+    }
+
+    @Test
+    void deleteNotExistBook() throws Exception {
+        mockMvc.perform(post("/books/99999999999999/delete")
+                        .with(csrf()))
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        view().name("error/error404")
                 );
     }
 }

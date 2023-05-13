@@ -2,6 +2,7 @@ package org.example.service.dto.bookDto;
 
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
+import org.example.service.validation.annotation.ActualBookYear;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
@@ -21,7 +22,8 @@ public class BookCreateEditDto {
 
     Integer categoryId;
 
-    @Min(value = 1800, message = "Publish year must be from 1800 to current year")
+    @Min(value = 1700, message = "Publish year must be from 1700 to current year")
+    @ActualBookYear(message = "Publish year must be from 1700 to current year")
     Integer publishYear;
 
     @NotEmpty(message = "Description must be not empty")

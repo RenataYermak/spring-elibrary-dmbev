@@ -11,7 +11,6 @@ import org.example.service.mapper.userMapper.UserReadMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,6 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
                 .map(userReadMapper::map);
@@ -65,7 +63,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserReadDto create(UserCreateEditDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
             UserReadDto userReadDto = Optional.of(userDto)
                     .map(userCreateEditMapper::map)
                     .map(userRepository::save)
@@ -80,7 +78,7 @@ public class UserService implements UserDetailsService {
             }
             return userReadDto;
         } else {
-            throw new IllegalArgumentException("User with email " + userDto.getEmail()  + " already exists.");
+            throw new IllegalArgumentException("User with email " + userDto.getEmail() + " already exists.");
         }
     }
 
@@ -105,9 +103,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SecurityUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .map(user -> new CustomUserDetails(
+                .map(user -> new SecurityUserDetailsImpl(
                         user.getId(),
                         user.getEmail(),
                         user.getPassword(),

@@ -2,9 +2,7 @@ package org.example.service.mapper.bookMapper;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.database.entity.Book;
-import org.example.service.dto.bookDto.AuthorReadDto;
 import org.example.service.dto.bookDto.BookReadDto;
-import org.example.service.dto.bookDto.CategoryReadDto;
 import org.example.service.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +17,10 @@ public class BookReadMapper implements Mapper<Book, BookReadDto> {
 
     @Override
     public BookReadDto map(Book object) {
-        AuthorReadDto author = Optional.ofNullable(object.getAuthor())
+        var author = Optional.ofNullable(object.getAuthor())
                 .map(authorReadMapper::map)
                 .orElse(null);
-        CategoryReadDto category = Optional.ofNullable(object.getCategory())
+        var category = Optional.ofNullable(object.getCategory())
                 .map(categoryReadMapper::map)
                 .orElse(null);
 

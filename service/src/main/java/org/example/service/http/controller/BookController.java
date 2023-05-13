@@ -2,7 +2,6 @@ package org.example.service.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.service.database.entity.Book;
 import org.example.service.database.repository.BookRepository;
 import org.example.service.dto.PageResponse;
 import org.example.service.dto.bookDto.BookCreateEditDto;
@@ -26,8 +25,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -38,7 +35,6 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final CategoryService categoryService;
-    private final BookRepository bookRepository;
 
     @GetMapping
     public String findAll(Model model,
@@ -79,16 +75,17 @@ public class BookController {
             return "redirect:/books/add";
         }
         bookService.create(book);
-        return "redirect:/books";
+        redirectAttributes.addAttribute("bookSuccessfullyCreated", "true");
+        return "redirect:/books/add";
     }
 
     @GetMapping("/{id}/update")
     public String update(@PathVariable(value = "id") long bookId, Model model) {
-        if (!bookRepository.existsById(bookId)) {
+        var book = bookService.findById(bookId);
+        if(book.isEmpty()){
             return "redirect:/books";
         }
-        Optional<Book> book = bookRepository.findById(bookId);
-        List<Book> result = new ArrayList<>();
+        var result = new ArrayList<>();
         book.ifPresent(result::add);
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("categories", categoryService.findAll());
@@ -104,18 +101,20 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("book", book);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/books//{id}/update";
+            return "redirect:/books/{id}/update";
         }
-        return bookService.update(id, book)
-                .map(it -> "redirect:/books/{id}")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        bookService.update(id, book);
+        redirectAttributes.addAttribute("bookSuccessfullyUpdated", "true");
+        return "redirect:/books/{id}/update";
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long bookId) {
+    public String delete(@PathVariable("id") Long bookId,
+                         RedirectAttributes redirectAttributes) {
         if (!bookService.delete(bookId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        redirectAttributes.addAttribute("bookSuccessfullyDeleted", "true");
         return "redirect:/books";
     }
 }

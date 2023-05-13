@@ -29,7 +29,7 @@ INSERT INTO users (id, email, firstname, lastname, password, role)
 VALUES (1, 'renatayermak@gmail.com', 'Renata', 'Yermak', '1212', 'ADMIN'),
        (2, 'alex@gmail.com', 'Alex', 'Yermak', '3333', 'USER'),
        (3, 'nikita@gmail.com', 'Nikita', 'Shturo', '2222', 'USER'),
-       (4, 'eva@gmail.com', 'Eva', 'Shturo', '1212', 'USER');
+       (4, 'test@gmail.com', 'Test', 'Test', '1212', 'USER');
 SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 
 INSERT INTO orders (id, ordered_date, status, type, book_id, user_id)
@@ -40,7 +40,7 @@ VALUES (1, '2023-01-10 8:54', 'RETURNED', 'SEASON_TICKET', (SELECT id FROM book 
        (3, '2023-04-23 13:54', 'RETURNED', 'SEASON_TICKET', (SELECT id FROM book WHERE title = 'Death on the Nile'),
         (SELECT id FROM users WHERE email = 'alex@gmail.com')),
        (4, '2018-04-22 5:24', 'ORDERED', 'READING_ROOM', (SELECT id FROM book WHERE title = 'The Premature Burial'),
-        (SELECT id FROM users WHERE email = 'eva@gmail.com')),
+        (SELECT id FROM users WHERE email = 'test@gmail.com')),
        (5, '2023-08-12 17:54', 'RETURNED', 'READING_ROOM',
         (SELECT id FROM book WHERE title = 'The Memoirs of Sherlock Holmes'),
         (SELECT id FROM users WHERE email = 'nikita@gmail.com'));

@@ -3,18 +3,21 @@ package org.example.service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 @Value
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class SecurityUserDetailsImpl implements SecurityUserDetails {
 
     Long id;
     String email;
     String password;
     Collection<? extends GrantedAuthority> authorities;
+
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -33,21 +36,21 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

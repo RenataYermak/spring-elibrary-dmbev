@@ -1,18 +1,17 @@
-package org.example.service.validation.anotation.impl;
+package org.example.service.validation.annotation.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.service.validation.anotation.UniqueValidator;
-import org.example.service.validation.anotation.Unique;
+import org.example.service.validation.annotation.Unique;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
 @RequiredArgsConstructor
-public class UniqueValidatorImpl implements UniqueValidator {
+public class UniqueValidatorImpl implements ConstraintValidator<Unique, Object> {
 
     private String fieldName;
     private String entityName;
@@ -32,8 +31,8 @@ public class UniqueValidatorImpl implements UniqueValidator {
             return true;
         }
 
-        String query = ("SELECT COUNT(*) > 0 FROM " + entityName + " WHERE " + fieldName + " = :value");
-        TypedQuery<Boolean> typedQuery = entityManager.createQuery(query, Boolean.class);
+        var query = ("SELECT COUNT(*) > 0 FROM " + entityName + " WHERE " + fieldName + " = :value");
+        var typedQuery = entityManager.createQuery(query, Boolean.class);
         typedQuery.setParameter("value", value);
         return !typedQuery.getSingleResult();
     }

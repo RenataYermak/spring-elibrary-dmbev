@@ -29,7 +29,9 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
+           enable: true
+logging:
+  config: classpath:logback-spring-tmp.xml
 
 springdoc:
   swagger-ui:

@@ -1,6 +1,6 @@
-package org.example.service.validation.anotation;
+package org.example.service.validation.annotation;
 
-import org.example.service.validation.anotation.impl.UniqueValidatorImpl;
+import org.example.service.validation.annotation.impl.BookYearValidatorImpl;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,15 +11,12 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueValidatorImpl.class)
-public @interface Unique {
+@Constraint(validatedBy = BookYearValidatorImpl.class)
+public @interface ActualBookYear {
     String message() default "Element is already exist";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    String fieldName() default "";
-
-    String entityName() default "";
 }
+
